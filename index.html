@@ -1,0 +1,3652 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة عوائد الاستثمار الصحي - النسخة المحسنة</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* نفس الكود السابق كاملاً بدون تغيير */
+        :root {
+            --primary: #0b3a5a;
+            --primary-light: #145f8c;
+            --primary-dark: #082a42;
+            --secondary: #1a936f;
+            --secondary-light: #2bbd91;
+            --accent: #ff6b6b;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* الشريط الجانبي */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-badge i {
+            font-size: 20px;
+            color: white;
+        }
+
+        .app-info h2 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .app-info small {
+            opacity: 0.8;
+            font-size: 12px;
+        }
+
+        .nav-links {
+            padding: 20px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+            border-right: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-right-color: var(--secondary);
+        }
+
+        .nav-item i {
+            margin-left: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #langToggle {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        #langToggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* المحتوى الرئيسي */
+        .content {
+            margin-right: 280px;
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* الشريط العلوي */
+        .topbar {
+            background: var(--bg-white);
+            padding: 16px 32px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topbar-info h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .topbar-info p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* شريط التبويبات الأفقي */
+        .horizontal-tabs {
+            background: var(--primary);
+            padding: 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 82px;
+            z-index: 98;
+        }
+
+        .horizontal-nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0;
+            padding: 0;
+        }
+
+        .horizontal-tab {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .horizontal-tab:hover, .horizontal-tab.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-bottom-color: var(--secondary);
+        }
+
+        .horizontal-tab i {
+            margin-left: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* البطاقات */
+        .card {
+            background: var(--bg-white);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header p {
+            color: var(--text-light);
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        /* أقسام الصفحة */
+        .section-container {
+            padding: 32px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 60px 32px;
+            border-radius: 0 0 var(--radius) var(--radius);
+            margin-bottom: 32px;
+        }
+
+        .hero-projects-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .hero-projects-card .hero-content {
+            padding: 60px 32px 40px 32px;
+        }
+
+        .hero-projects-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 32px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 600px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-light);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        .btn-secondary {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* بطاقات الاستثمار */
+        .invest-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .invest-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .invest-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .invest-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .invest-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .invest-card-sub {
+            font-size: 14px;
+            color: var(--text-light);
+            flex: 1;
+        }
+
+        /* نماذج الإدخال */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(11, 58, 90, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            font-size: 14px;
+            background-color: white;
+            transition: var(--transition);
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(11, 58, 90, 0.1);
+        }
+
+        .form-actions {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* شاشة تسجيل الدخول */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-container {
+            background: var(--bg-white);
+            padding: 40px;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .login-logo {
+            margin-bottom: 24px;
+        }
+
+        .login-logo i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: var(--text-light);
+            margin-bottom: 32px;
+        }
+
+        .login-form {
+            text-align: right;
+        }
+
+        .login-input-group {
+            margin-bottom: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(11, 58, 90, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-btn:hover {
+            background: var(--primary-light);
+        }
+
+        /* نتائج الحساب */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .kpi-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .kpi-sub {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* التقارير */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .project-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--secondary);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-details {
+            margin-top: 16px;
+        }
+
+        .project-detail-item {
+            margin-bottom: 12px;
+            display: flex;
+        }
+
+        .project-detail-label {
+            font-weight: 600;
+            min-width: 120px;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .project-detail-value {
+            flex: 1;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .project-roi {
+            background: rgba(26, 147, 111, 0.1);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin-top: 16px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--secondary);
+            border: 1px solid rgba(26, 147, 111, 0.2);
+        }
+
+        .history-item {
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .history-item:hover {
+            background-color: var(--bg-light);
+            border-color: var(--primary-light);
+        }
+
+        /* نماذج جديدة للعوائد غير المالية */
+        .nonfinancial-formula {
+            background: var(--bg-light);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin: 15px 0;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .formula-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .formula-equation {
+            font-family: monospace;
+            color: var(--text-dark);
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            margin: 5px 0;
+            font-size: 13px;
+        }
+
+        /* نتائج العوائد غير المالية */
+        .nf-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nf-result-card {
+            background: var(--bg-white);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--secondary);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .nf-result-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nf-result-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .nf-result-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .nf-result-unit {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 3px;
+        }
+
+        /* فريق العمل */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .team-member {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--secondary);
+            transition: var(--transition);
+        }
+
+        .team-member:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .team-member h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .team-member p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* الرسوم البيانية */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .chart-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .chart-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* صفحات التقارير التفصيلية */
+        .report-detail-page {
+            display: none;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 12px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chart-type-select {
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        /* شبكة المشاريع */
+        .projects-tab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .project-tab-card {
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .project-tab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-light);
+        }
+
+        .project-tab-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .project-tab-card p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .project-tab-roi {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--secondary);
+            text-align: center;
+            padding: 8px;
+            background: rgba(26, 147, 111, 0.1);
+            border-radius: var(--radius-sm);
+        }
+
+        /* المشاريع المحفوظة */
+        .saved-projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .saved-project-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .saved-project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-left-color: var(--secondary);
+        }
+
+        .saved-project-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .saved-project-card p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .saved-project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .saved-project-date {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .saved-project-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .project-type-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: var(--primary-light);
+            color: white;
+        }
+
+        /* التكيف مع الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .content {
+                margin-right: 0;
+            }
+            
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+            }
+            
+            .invest-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-tab-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .indicator-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .nf-results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .saved-projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .saved-project-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .saved-project-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول -->
+<div id="loginScreen">
+    <div class="login-container">
+        <div class="login-logo">
+            <i class="fas fa-heartbeat"></i>
+            <h1 class="login-title">تسجيل الدخول</h1>
+            <p class="login-subtitle">منصة عوائد الاستثمار الصحي - النسخة المحسنة</p>
+        </div>
+        <form class="login-form" id="loginForm">
+            <div class="login-input-group">
+                <input type="text" id="loginUser" class="login-input" placeholder="اسم المستخدم">
+            </div>
+            <div class="login-input-group">
+                <input type="password" id="loginPass" class="login-input" placeholder="كلمة المرور">
+            </div>
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> دخول
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- الهيكل الرئيسي -->
+<div class="layout" style="display:none;" id="mainLayout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-badge">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="app-info">
+                    <h2 id="appTitle">منصة عوائد الاستثمار الصحي</h2>
+                    <small id="appSub">تحليل استثمارات المستشفيات والأدوية والأجهزة الطبية</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <div class="nav-item active" onclick="showSection('home')">
+                <i class="fas fa-home"></i>
+                <span>الصفحة الرئيسية</span>
+            </div>
+            <div class="nav-item" onclick="showSection('dashboard')">
+                <i class="fas fa-chart-bar"></i>
+                <span>لوحة التحكم</span>
+            </div>
+            <div class="nav-item" onclick="showSection('savedProjects')">
+                <i class="fas fa-save"></i>
+                <span>المشاريع المحفوظة</span>
+            </div>
+            <div class="nav-item" onclick="showSection('reports')">
+                <i class="fas fa-chart-line"></i>
+                <span>التقارير والتحليل</span>
+            </div>
+            <div class="nav-item" onclick="showSection('about')">
+                <i class="fas fa-info-circle"></i>
+                <span>حول المنصة</span>
+            </div>
+            <div class="nav-item" onclick="showSection('team')">
+                <i class="fas fa-users"></i>
+                <span>من نحن</span>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button id="langToggle" onclick="switchLang()">
+                <i class="fas fa-language"></i> EN / عربي
+            </button>
+        </div>
+    </aside>
+
+    <main class="content">
+        <div class="topbar">
+            <div class="topbar-info">
+                <h1 id="topTitle">منصة عوائد الاستثمار الصحي</h1>
+                <p id="topMeta">نظام موحّد لحساب وتحليل عوائد الاستثمار الصحي - النسخة المحسنة</p>
+            </div>
+            <div class="user-menu">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريط التبويبات الأفقي -->
+        <div class="horizontal-tabs">
+            <div class="horizontal-nav">
+                <div class="horizontal-tab active" onclick="showSection('home')">
+                    <i class="fas fa-home"></i>
+                    <span>الصفحة الرئيسية</span>
+                </div>
+                <div class="horizontal-tab" onclick="showSection('selection')">
+                    <i class="fas fa-calculator"></i>
+                    <span>حساب ROI</span>
+                </div>
+                <div class="horizontal-tab" onclick="showSection('projects')">
+                    <i class="fas fa-project-diagram"></i>
+                    <span id="horizontalProjectsTabTitle">مشاريع تعزيز الاستثمار الصحي</span>
+                </div>
+                <div class="horizontal-tab" onclick="showSection('reports')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>التقارير والتحليل</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <!-- الصفحة الرئيسية -->
+            <section id="homeSection">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title" id="homeHeroTitle">مرحبًا بك في منصة عوائد الاستثمار الصحي المحسنة</h1>
+                        <p class="hero-subtitle" id="homeHeroSub">
+                            احسب عوائد الاستثمار في المستشفيات، الأدوية، الأجهزة الطبية، والمؤشرات غير المالية، مع تحسينات بناءً على ملاحظات الخبراء.
+                        </p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary" onclick="showSection('selection')">
+                                <i class="fas fa-play-circle"></i> ابدأ الآن
+                            </button>
+                            <button class="btn btn-outline" onclick="showSection('dashboard')">
+                                <i class="fas fa-tachometer-alt"></i> عرض لوحة التحكم
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="projectDetailsSection" class="project-details-section" style="display:none;"></div>
+            </section>
+
+            <!-- اختيار نوع الاستثمار -->
+            <section id="selectionSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-hand-pointer"></i> <span id="selectTitle">اختر نوع الاستثمار</span></h2>
+                    <p id="selectSub">اختر نوع الاستثمار الصحي الذي ترغب في تحليله، ثم انتقل لنموذج إدخال البيانات.</p>
+                </div>
+                <div class="invest-cards">
+                    <div class="invest-card" onclick="selectInvestment('hospital')">
+                        <div class="invest-card-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="invest-card-title" id="cardHospitalTitle">مستشفى / عيادات (محسّن)</div>
+                        <div class="invest-card-sub" id="cardHospitalSub">تحليل الإيرادات والتكاليف مع دعم المؤسسات الربحية وغير الربحية.</div>
+                    </div>
+                    <div class="invest-card" onclick="selectInvestment('pharma')">
+                        <div class="invest-card-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="invest-card-title" id="cardPharmaTitle">أدوية / Pharmaceuticals</div>
+                        <div class="invest-card-sub" id="cardPharmaSub">استثمارات تطوير الأدوية والتجارب السريرية والتصنيع.</div>
+                    </div>
+                    <div class="invest-card" onclick="selectInvestment('devices')">
+                        <div class="invest-card-icon">
+                            <i class="fas fa-x-ray"></i>
+                        </div>
+                        <div class="invest-card-title" id="cardDevicesTitle">أجهزة طبية / Medical Devices</div>
+                        <div class="invest-card-sub" id="cardDevicesSub">تحليل جدوى شراء وتشغيل وصيانة الأجهزة الطبية.</div>
+                    </div>
+                    <div class="invest-card" onclick="selectInvestment('nonfinancial')">
+                        <div class="invest-card-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="invest-card-title" id="cardNFTitle">عوائد غير مالية / Non-Financial (محسّن)</div>
+                        <div class="invest-card-sub" id="cardNFSub">حساب ROI، صافي المنفعة، نسبة B/C، CEA، CUA للتكاليف العلاجية المتجنبة</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- إدخال البيانات -->
+            <section id="inputSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-edit"></i> <span id="inputTitle">نموذج إدخال البيانات</span></h2>
+                    <p id="inputSub">أدخل بيانات الاستثمار الصحي وفق النوع المختار، ثم اضغط حساب.</p>
+                </div>
+                <div class="form-grid" id="dynamicForm"></div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="calculateROI()">
+                        <i class="fas fa-calculator"></i> حساب ROI
+                    </button>
+                    <button class="btn btn-outline" onclick="fillDummyData()">
+                        <i class="fas fa-database"></i> بيانات تجريبية
+                    </button>
+                    <button class="btn btn-secondary" onclick="showSection('selection')">
+                        <i class="fas fa-arrow-right"></i> رجوع لاختيار النوع
+                    </button>
+                </div>
+            </section>
+
+            <!-- لوحة التحكم والنتائج -->
+            <section id="dashboardSection" style="display:none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> <span id="resultTitle">نتائج الحساب ومؤشرات الأداء</span></h2>
+                        <p id="resultSub">تعرض هذه الصفحة نتائج الحساب (الإيرادات، التكاليف، صافي الربح، ROI، التصنيف)، مع رسومات بيانية.</p>
+                    </div>
+                    <div class="kpi-grid" id="kpiFinancialRow">
+                        <div class="kpi-card">
+                            <div class="kpi-label"><i class="fas fa-money-bill-wave"></i> <span id="labelRevenue">إجمالي الإيرادات</span></div>
+                            <div class="kpi-value" id="kpiRevenue">—</div>
+                            <div class="kpi-sub" id="subRevenue">حسب البيانات المدخلة</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label"><i class="fas fa-receipt"></i> <span id="labelCost">إجمالي التكاليف</span></div>
+                            <div class="kpi-value" id="kpiCost">—</div>
+                            <div class="kpi-sub" id="subCost">حسب البيانات المدخلة</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label"><i class="fas fa-chart-line"></i> <span id="labelProfit">صافي الربح</span></div>
+                            <div class="kpi-value" id="kpiProfit">—</div>
+                            <div class="kpi-sub" id="subProfit">إيرادات - تكاليف</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-label"><i class="fas fa-percentage"></i> <span id="labelROI">العائد على الاستثمار ROI</span></div>
+                            <div class="kpi-value" id="kpiROI">—%</div>
+                            <div class="kpi-sub" id="subROI">نسبة العائد إلى التكاليف</div>
+                        </div>
+                    </div>
+                    
+                    <!-- نتائج العوائد غير المالية (تظهر فقط لنوع nonfinancial) -->
+                    <div id="nonFinancialResults" style="display:none; margin-top: 24px;">
+                        <h3 style="margin-bottom: 16px; color: var(--primary);">
+                            <i class="fas fa-chart-bar"></i> <span id="nfResultsTitle">نتائج المؤشرات غير المالية</span>
+                        </h3>
+                        <div class="info-tip">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="nfResultsTip">حساب شامل للعوائد غير المالية بناءً على التكاليف العلاجية المتجنبة</span>
+                        </div>
+                        <div class="nf-results-grid" id="nfResultsGrid"></div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="showSection('reports')">
+                            <i class="fas fa-chart-line"></i> عرض التقارير
+                        </button>
+                        <button class="btn btn-success" onclick="saveCurrentProject()">
+                            <i class="fas fa-save"></i> حفظ المشروع
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('selection')">
+                            <i class="fas fa-calculator"></i> حساب جديد
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- التقارير والتحليل الرئيسية -->
+            <section id="reportsSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> <span id="reportsTitle">التقارير والتحليل المتقدم</span></h2>
+                    <p id="reportsSub">تحليل متقدم للاستثمارات الصحية ومقارنة الأداء وتقديم توصيات استثمارية.</p>
+                </div>
+                <div id="reportsContent">
+                    <div class="projects-grid">
+                        <div class="project-card">
+                            <h3><i class="fas fa-chart-bar"></i> تحليل الأداء المالي</h3>
+                            <p>تحليل شامل للأداء المالي للاستثمارات الصحية مع مؤشرات الأداء الرئيسية.</p>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="showReportDetail('financial')">عرض التقرير التفصيلي</button>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card">
+                            <h3><i class="fas fa-balance-scale"></i> مقارنة الاستثمارات</h3>
+                            <p>مقارنة أداء أنواع الاستثمارات المختلفة لتحديد الأكثر ربحية.</p>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="showReportDetail('comparison')">عرض التقرير التفصيلي</button>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card">
+                            <h3><i class="fas fa-exclamation-triangle"></i> تحليل المخاطر</h3>
+                            <p>تقييم المخاطر المحتملة للاستثمارات الصحية وتقديم توصيات للتخفيف.</p>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" onclick="showReportDetail('risk')">عرض التقرير التفصيلي</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-outline" onclick="showSection('home')">
+                        <i class="fas fa-home"></i> الصفحة الرئيسية
+                    </button>
+                </div>
+            </section>
+
+            <!-- صفحة تحليل الأداء المالي التفصيلية -->
+            <section id="financialReportDetail" class="report-detail-page card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-bar"></i> <span id="financialReportTitle">تحليل الأداء المالي التفصيلي</span></h2>
+                    <p id="financialReportSub">تحليل شامل للأداء المالي مع رسوم بيانية تفاعلية ومؤشرات أداء مفصلة.</p>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-pie"></i> توزيع التكاليف</h3>
+                        <div class="chart-container">
+                            <canvas id="costDistributionChart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <select class="chart-type-select" onchange="updateChartType('costDistributionChart', this.value)">
+                                <option value="pie">رسم دائري</option>
+                                <option value="doughnut">دونات</option>
+                                <option value="bar">أعمدة</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadChart('costDistributionChart')">
+                                <i class="fas fa-download"></i> تحميل الرسم
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-line"></i> اتجاهات الأداء المالي</h3>
+                        <div class="chart-container">
+                            <canvas id="performanceTrendChart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <select class="chart-type-select" onchange="updateChartType('performanceTrendChart', this.value)">
+                                <option value="line">خطي</option>
+                                <option value="bar">أعمدة</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadChart('performanceTrendChart')">
+                                <i class="fas fa-download"></i> تحميل الرسم
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3><i class="fas fa-percentage"></i> مؤشرات الربحية</h3>
+                    <div class="chart-container">
+                        <canvas id="profitabilityChart"></canvas>
+                    </div>
+                    <div class="chart-controls">
+                        <button class="btn btn-secondary btn-sm" onclick="downloadChart('profitabilityChart')">
+                            <i class="fas fa-download"></i> تحميل الرسم
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showReportDetail('back')">
+                        <i class="fas fa-arrow-right"></i> رجوع للتقارير الرئيسية
+                    </button>
+                </div>
+            </section>
+
+            <!-- صفحة مقارنة الاستثمارات التفصيلية -->
+            <section id="comparisonReportDetail" class="report-detail-page card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-balance-scale"></i> <span id="comparisonReportTitle">مقارنة الاستثمارات التفصيلية</span></h2>
+                    <p id="comparisonReportSub">مقارنة شاملة بين أنواع الاستثمارات المختلفة مع تحليل بياني تفاعلي.</p>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-bar"></i> مقارنة العوائد على الاستثمار</h3>
+                        <div class="chart-container">
+                            <canvas id="roiComparisonChart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <select class="chart-type-select" onchange="updateChartType('roiComparisonChart', this.value)">
+                                <option value="bar">أعمدة</option>
+                                <option value="radar">رادار</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadChart('roiComparisonChart')">
+                                <i class="fas fa-download"></i> تحميل الرسم
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-money-bill-wave"></i> مقارنة صافي الأرباح</h3>
+                        <div class="chart-container">
+                            <canvas id="profitComparisonChart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <select class="chart-type-select" onchange="updateChartType('profitComparisonChart', this.value)">
+                                <option value="bar">أعمدة</option>
+                                <option value="line">خطي</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadChart('profitComparisonChart')">
+                                <i class="fas fa-download"></i> تحميل الرسم
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3><i class="fas fa-timeline"></i> تطور الأداء عبر الزمن</h3>
+                    <div class="chart-container">
+                        <canvas id="timelineComparisonChart"></canvas>
+                    </div>
+                    <div class="chart-controls">
+                        <select class="chart-type-select" onchange="updateChartType('timelineComparisonChart', this.value)">
+                            <option value="line">خطي</option>
+                            <option value="bar">أعمدة مكدسة</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" onclick="downloadChart('timelineComparisonChart')">
+                            <i class="fas fa-download"></i> تحميل الرسم
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showReportDetail('back')">
+                        <i class="fas fa-arrow-right"></i> رجوع للتقارير الرئيسية
+                    </button>
+                </div>
+            </section>
+
+            <!-- صفحة تحليل المخاطر التفصيلية -->
+            <section id="riskReportDetail" class="report-detail-page card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-exclamation-triangle"></i> <span id="riskReportTitle">تحليل المخاطر التفصيلي</span></h2>
+                    <p id="riskReportSub">تقييم شامل للمخاطر وتقديم توصيات للتخفيف مع تحليل بياني تفاعلي.</p>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-radar-chart"></i> خريطة المخاطر</h3>
+                        <div class="chart-container">
+                            <canvas id="riskMapChart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <select class="chart-type-select" onchange="updateChartType('riskMapChart', this.value)">
+                                <option value="radar">رادار</option>
+                                <option value="polarArea">قطبي</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadChart('riskMapChart')">
+                                <i class="fas fa-download"></i> تحميل الرسم
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-pie"></i> توزيع مستويات المخاطرة</h3>
+                        <div class="chart-container">
+                            <canvas id="riskLevelChart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <select class="chart-type-select" onchange="updateChartType('riskLevelChart', this.value)">
+                                <option value="pie">رسم دائري</option>
+                                <option value="doughnut">دونات</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadChart('riskLevelChart')">
+                                <i class="fas fa-download"></i> تحميل الرسم
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-line"></i> تحليل حساسية المخاطر</h3>
+                    <div class="chart-container">
+                        <canvas id="riskSensitivityChart"></canvas>
+                    </div>
+                    <div class="chart-controls">
+                        <button class="btn btn-secondary btn-sm" onclick="downloadChart('riskSensitivityChart')">
+                            <i class="fas fa-download"></i> تحميل الرسم
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showReportDetail('back')">
+                        <i class="fas fa-arrow-right"></i> رجوع للتقارير الرئيسية
+                    </button>
+                </div>
+            </section>
+
+            <!-- مشاريع تعزيز الاستثمار الصحي -->
+            <section id="projectsSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-project-diagram"></i> <span id="projectsSectionTitle">مشاريع تعزيز الاستثمار الصحي</span></h2>
+                    <p id="projectsSectionSub">استكشف المشاريع المختلفة لتعزيز الاستثمار الصحي وعوائدها على الاستثمار.</p>
+                </div>
+                <div class="projects-tab-grid" id="projectsSectionGrid">
+                    <!-- سيتم تعبئة المشاريع هنا ديناميكياً -->
+                </div>
+                <div id="projectDetailsSectionStandalone" class="project-details-section" style="display:none; margin-top: 24px;"></div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showSection('home')">
+                        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+                    </button>
+                </div>
+            </section>
+
+            <!-- المشاريع المحفوظة -->
+            <section id="savedProjectsSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-save"></i> <span id="savedProjectsTitle">المشاريع المحفوظة</span></h2>
+                    <p id="savedProjectsSub">عرض وإدارة المشاريع المحفوظة مع إمكانية الاسترجاع.</p>
+                </div>
+                <div class="saved-projects-grid" id="savedProjectsGrid">
+                    <!-- سيتم تعبئة المشاريع المحفوظة هنا ديناميكياً -->
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-right"></i> العودة للنتائج
+                    </button>
+                </div>
+            </section>
+
+            <!-- حول المنصة -->
+            <section id="aboutSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-info-circle"></i> <span id="aboutTitle">حول المنصة</span></h2>
+                </div>
+                <p id="aboutText">
+                    تم تصميم هذه المنصة المحسنة بناءً على ملاحظات الخبراء، حيث تم تحسين:
+                    <ul style="margin-top: 15px; padding-right: 20px;">
+                        <li>نموذج المستشفى/العيادات لدعم المؤسسات الربحية وغير الربحية</li>
+                        <li>تقسيم تكاليف المعدات والمرافق على العمر الافتراضي</li>
+                        <li>نموذج العوائد غير المالية المحسن مع 6 مقاييس رئيسية</li>
+                        <li>حساب ROI، صافي المنفعة، نسبة B/C، CEA، CUA</li>
+                        <li>تحسين عرض النتائج والتقارير التفصيلية</li>
+                    </ul>
+                </p>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showSection('home')">
+                        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+                    </button>
+                </div>
+            </section>
+
+            <!-- من نحن -->
+            <section id="teamSection" class="card" style="display:none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-users"></i> <span id="teamTitle">من نحن</span></h2>
+                </div>
+                <p>فريق العمل المتميز الذي ساهم في تطوير هذه المنصة:</p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <h3>الممرضة بدرية عامر السلماني</h3>
+                        <p>مركز إسماعيه الصحي</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>الممرضة رياء ناصر السلماني</h3>
+                        <p>مركز إسماعيه الصحي</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>مساعد صيدلي جهاد إسماعيل</h3>
+                        <p>مركز إسماعيه الصحي</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>محمد عبد الله الرحبي</h3>
+                        <p>دائرة تقنية المعلومات</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>زايد سلطان المحروقي</h3>
+                        <p>مستشفى سناو</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>الصيدلانية زينب الحارثي</h3>
+                        <p>مستشفى إبراء المرجعي</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>ايمان سعيد المسكري</h3>
+                        <p>مستشفى إبراء المرجعي</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>عمر الحارثي</h3>
+                        <p>قسم التطوير و التوجيه المهني</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="showSection('home')">
+                        <i class="fas fa-arrow-right"></i> العودة للرئيسية
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script>
+// البيانات الأساسية
+const text = {
+    ar: {
+        appTitle: "منصة عوائد الاستثمار الصحي - المحسنة",
+        appSub: "تحليل استثمارات المستشفيات والأدوية والأجهزة الطبية مع تحسينات",
+        topTitle: "منصة عوائد الاستثمار الصحي - المحسنة",
+        topMeta: "نظام موحّد لحساب وتحليل عوائد الاستثمار الصحي مع تحسينات بناءً على ملاحظات الخبراء",
+        homeHeroTitle: "مرحبًا بك في منصة عوائد الاستثمار الصحي المحسنة",
+        homeHeroSub: "احسب عوائد الاستثمار في المستشفيات، الأدوية، الأجهزة الطبية، والمؤشرات غير المالية، مع تحسينات بناءً على ملاحظات الخبراء.",
+        selectTitle: "اختر نوع الاستثمار",
+        selectSub: "اختر نوع الاستثمار الصحي الذي ترغب في تحليله، ثم انتقل لنموذج إدخال البيانات.",
+        cardHospitalTitle: "مستشفى / عيادات (محسّن)",
+        cardHospitalSub: "تحليل الإيرادات والتكاليف مع دعم المؤسسات الربحية وغير الربحية وتقسيم التكاليف على العمر الافتراضي.",
+        cardPharmaTitle: "أدوية / Pharmaceuticals",
+        cardPharmaSub: "استثمارات تطوير الأدوية والتجارب السريرية والتصنيع.",
+        cardDevicesTitle: "أجهزة طبية / Medical Devices",
+        cardDevicesSub: "تحليل جدوى شراء وتشغيل وصيانة الأجهزة الطبية.",
+        cardNFTitle: "عوائد غير مالية / Non-Financial (محسّن)",
+        cardNFSub: "حساب ROI، صافي المنفعة، نسبة B/C، CEA، CUA للتكاليف العلاجية المتجنبة",
+        inputTitle: "نموذج إدخال البيانات",
+        inputSub: "أدخل بيانات الاستثمار الصحي وفق النوع المختار، ثم اضغط حساب.",
+        resultTitle: "نتائج الحساب ومؤشرات الأداء",
+        resultSub: "تعرض هذه الصفحة نتائج الحساب (الإيرادات، التكاليف، صافي الربح، ROI، التصنيف)، مع رسومات بيانية.",
+        reportsTitle: "التقارير والتحليل المتقدم",
+        reportsSub: "تحليل متقدم للاستثمارات الصحية ومقارنة الأداء وتقديم توصيات استثمارية.",
+        aboutTitle: "حول المنصة",
+        aboutText: "تم تصميم هذه المنصة المحسنة بناءً على ملاحظات الخبراء، حيث تم تحسين نموذج المستشفى/العيادات والعوائد غير المالية.",
+        teamTitle: "من نحن",
+        projectsTabTitle: "مشاريع تعزيز الاستثمار الصحي",
+        projectsSectionTitle: "مشاريع تعزيز الاستثمار الصحي",
+        projectsSectionSub: "استكشف المشاريع المختلفة لتعزيز الاستثمار الصحي وعوائدها على الاستثمار.",
+        labelRevenue: "إجمالي الإيرادات",
+        labelCost: "إجمالي التكاليف",
+        labelProfit: "صافي الربح",
+        labelROI: "العائد على الاستثمار ROI",
+        nfResultsTitle: "نتائج المؤشرات غير المالية",
+        nfResultsTip: "حساب شامل للعوائد غير المالية بناءً على التكاليف العلاجية المتجنبة",
+        noteHospital: "ملاحظة: للمؤسسات غير الربحية، يركز الحساب على تحسين المؤشرات الصحية بدلاً من الربح المالي",
+        noteNonFinancial: "ملاحظة: أدخل بيانات برنامج التوعية الصحية لحساب العوائد غير المالية المتعددة",
+        financialReportTitle: "تحليل الأداء المالي التفصيلي",
+        financialReportSub: "تحليل شامل للأداء المالي مع رسوم بيانية تفاعلية ومؤشرات أداء مفصلة.",
+        comparisonReportTitle: "مقارنة الاستثمارات التفصيلية",
+        comparisonReportSub: "مقارنة شاملة بين أنواع الاستثمارات المختلفة مع تحليل بياني تفاعلي.",
+        riskReportTitle: "تحليل المخاطر التفصيلي",
+        riskReportSub: "تقييم شامل للمخاطر وتقديم توصيات للتخفيف مع تحليل بياني تفاعلي.",
+        savedProjectsTitle: "المشاريع المحفوظة",
+        savedProjectsSub: "عرض وإدارة المشاريع المحفوظة مع إمكانية الاسترجاع.",
+        projectSavedMsg: "تم حفظ المشروع بنجاح!",
+        projectDeletedMsg: "تم حذف المشروع بنجاح!",
+        projectRestoredMsg: "تم استرجاع المشروع بنجاح!"
+    },
+    en: {
+        appTitle: "Health Investment ROI Platform - Enhanced",
+        appSub: "Analyze investments in hospitals, pharma, and medical devices with enhancements",
+        topTitle: "Health Investment ROI Platform - Enhanced",
+        topMeta: "Unified system to calculate and analyze health investment ROI with expert feedback improvements",
+        homeHeroTitle: "Welcome to the Enhanced Health Investment ROI Platform",
+        homeHeroSub: "Calculate ROI for hospitals, pharmaceuticals, medical devices, and non-financial benefits with expert feedback improvements.",
+        selectTitle: "Select Investment Type",
+        selectSub: "Choose the health investment type you want to analyze, then proceed to the input form.",
+        cardHospitalTitle: "Hospital / Clinics (Enhanced)",
+        cardHospitalSub: "Analyze revenue, cost with support for profit and non-profit institutions and cost division by lifespan.",
+        cardPharmaTitle: "Pharmaceuticals",
+        cardPharmaSub: "Investments in drug R&D, clinical trials, and manufacturing.",
+        cardDevicesTitle: "Medical Devices",
+        cardDevicesSub: "Evaluate feasibility of purchasing, operating, and maintaining medical devices.",
+        cardNFTitle: "Non-Financial Benefits (Enhanced)",
+        cardNFSub: "Calculate ROI, Net Benefit, B/C Ratio, CEA, CUA for avoided treatment costs",
+        inputTitle: "Input Form",
+        inputSub: "Enter investment data according to the selected type, then click Calculate.",
+        resultTitle: "Results & KPIs",
+        resultSub: "This page shows revenue, costs, net profit, ROI and classification, along with charts.",
+        reportsTitle: "Advanced Reports & Analysis",
+        reportsSub: "Advanced analysis of health investments, performance comparison, and investment recommendations.",
+        aboutTitle: "About the Platform",
+        aboutText: "This enhanced platform is based on expert feedback, with improvements to hospital/clinic and non-financial models.",
+        teamTitle: "About Us",
+        projectsTabTitle: "Health Investment Enhancement Projects",
+        projectsSectionTitle: "Health Investment Enhancement Projects",
+        projectsSectionSub: "Explore different projects to enhance health investment and their return on investment.",
+        labelRevenue: "Total Revenue",
+        labelCost: "Total Cost",
+        labelProfit: "Net Profit",
+        labelROI: "ROI",
+        nfResultsTitle: "Non-Financial Indicators Results",
+        nfResultsTip: "Comprehensive calculation of non-financial benefits based on avoided treatment costs",
+        noteHospital: "Note: For non-profit institutions, calculation focuses on health indicator improvement rather than financial profit",
+        noteNonFinancial: "Note: Enter health awareness program data to calculate multiple non-financial returns",
+        financialReportTitle: "Detailed Financial Performance Analysis",
+        financialReportSub: "Comprehensive financial performance analysis with interactive charts and detailed KPIs.",
+        comparisonReportTitle: "Detailed Investment Comparison",
+        comparisonReportSub: "Comprehensive comparison between different investment types with interactive graphical analysis.",
+        riskReportTitle: "Detailed Risk Analysis",
+        riskReportSub: "Comprehensive risk assessment and mitigation recommendations with interactive analysis.",
+        savedProjectsTitle: "Saved Projects",
+        savedProjectsSub: "View and manage saved projects with restoration capability.",
+        projectSavedMsg: "Project saved successfully!",
+        projectDeletedMsg: "Project deleted successfully!",
+        projectRestoredMsg: "Project restored successfully!"
+    }
+};
+
+// بيانات المشاريع الثمانية الأصلية
+const projectsData = {
+    ar: [
+        {
+            id: 1,
+            title: "مشروع التوعية ضد السمنة",
+            description: "برنامج التوعية للوقاية من السمنة يهدف إلى تقليل معدلات السمنة بين فئة الشباب والبالغين من خلال التوعية بالتغذية الصحية والنشاط البدني.",
+            target: "طلاب المدارس والجامعات - موظفو القطاع العام",
+            activities: "حملات إعلامية وتثقيفية - ورش عمل مع مختصين بالتغذية - برامج رياضية مجانية أو مدعومة - توزيع منشورات توعوية",
+            expectedReturn: "تقليل معدلات السمنة بنسبة 15-20% خلال 5 سنوات - انخفاض تكاليف علاج الأمراض المرتبطة بالسمنة - رفع إنتاجية الأفراد وتقليل أيام التغيب المرضي",
+            indicators: "قياس مؤشر كتلة الجسم قبل وبعد البرنامج - نسبة الحضور والمشاركة - التغير في السلوك الغذائي والرياضي",
+            recommendations: "التوسع في البرنامج ليشمل مناطق أخرى - إدماج البرنامج ضمن الرعاية الأولية - تطوير مواد توعية رقمية تفاعلية - تقييم سنوي لقياس الأثر الصحي والمالي",
+            roi: "233%"
+        },
+        {
+            id: 2,
+            title: "مشروع التوعية ضد التدخين",
+            description: "برنامج التوعية للحد من التدخين يهدف إلى تقليل نسبة المدخنين ورفع الوعي بأضرار التدخين.",
+            target: "المراهقون - طلاب المدارس - الموظفون",
+            activities: "محاضرات توعوية في المدارس والجامعات - حملات في وسائل الإعلام ومواقع التواصل - توفير الدعم للإقلاع عن التدخين (مثل العيادات المجانية)",
+            expectedReturn: "خفض نسبة المدخنين الجدد - تقليل تكاليف الرعاية الصحية الناتجة عن أمراض التدخين - زيادة الوعي الصحي المجتمعي - خفض زيارات الطوارئ بنسبة 30% - تقليل دخول المستشفيات بنسبة 20%",
+            indicators: "انخفاض نسبة المدخنين خلال فترة البرنامج - عدد المشاركين في برامج الإقلاع - عدد الحصص التوعوية المنفذة",
+            recommendations: "التوسع في البرنامج ليشمل مناطق أخرى - إدماج البرنامج ضمن الرعاية الأولية - تطوير مواد توعية رقمية تفاعلية - تقييم سنوي لقياس الأثر الصحي والمالي",
+            roi: "367%"
+        },
+        {
+            id: 3,
+            title: "مشروع التوعية لمرضى السكري",
+            description: "برنامج توعوي شامل لمرضى السكري يهدف إلى تحسين إدارة المرض وتقليل المضاعفات.",
+            target: "مرضى السكري - أفراد عائلاتهم - مقدمي الرعاية الصحية",
+            activities: "جلسات توعوية حول إدارة السكري - توزيع أجهزة قياس السكر - تدريبات على حقن الأنسولين - استشارات غذائية",
+            expectedReturn: "تحسين التحكم في مستويات السكر - تقليل مضاعفات السكري - خفض تكاليف الرعاية الصحية - تحسين جودة الحياة",
+            indicators: "مستويات السكر التراكمي - عدد زيارات الطوارئ - معدل دخول المستشفى",
+            recommendations: "التوسع في البرنامج ليشمل جميع المناطق - توفير تطبيق إلكتروني للمتابعة - تدريب مقدمي الرعاية الصحية",
+            roi: "289%"
+        },
+        {
+            id: 4,
+            title: "مشروع التوعية للحوامل من فقر الدم",
+            description: "برنامج توعوي للوقاية من فقر الدم لدى الحوامل وتحسين صحة الأم والجنين.",
+            target: "الحوامل - النساء في سن الإنجاب - مقدمي الرعاية الصحية",
+            activities: "جلسات توعوية حول التغذية - توزيع مكملات الحديد - فحوصات دورية للدم - استشارات غذائية",
+            expectedReturn: "تقليل حالات فقر الدم لدى الحوامل - تحسين صحة الأم والجنين - تقليل مضاعفات الحمل والولادة",
+            indicators: "مستويات الهيموجلوبين - معدل الولادات المبكرة - وزن المواليد",
+            recommendations: "التوسع في البرنامج ليشمل جميع المراكز الصحية - توفير مكملات غذائية مجانية - تدريب القابلات",
+            roi: "312%"
+        },
+        {
+            id: 5,
+            title: "مشروع التوعية للمباعدة بين الولادات",
+            description: "برنامج توعوي لتعزيز المباعدة بين الولادات وتحسين صحة الأم والطفل.",
+            target: "الأزواج - النساء في سن الإنجاب - مقدمي الرعاية الصحية",
+            activities: "جلسات توعوية حول تنظيم الأسرة - توزيع وسائل منع الحمل - استشارات أسرية - ندوات تثقيفية",
+            expectedReturn: "تحسين صحة الأم والطفل - تقليل وفيات الأمهات - تحسين الوضع الاقتصادي للأسر",
+            indicators: "معدل استخدام وسائل منع الحمل - الفترة بين الولادات - صحة الأمهات والأطفال",
+            recommendations: "التوسع في البرنامج ليشمل جميع المناطق - توفير وسائل منع الحمل مجاناً - تدريب مقدمي الخدمات",
+            roi: "275%"
+        },
+        {
+            id: 6,
+            title: "مشروع التوعية لمرضى الضغط",
+            description: "برنامج توعوي لمرضى الضغط يهدف إلى تحسين إدارة المرض وتقليل المضاعفات.",
+            target: "مرضى الضغط - كبار السن - مقدمي الرعاية الصحية",
+            activities: "جلسات توعوية حول إدارة الضغط - توزيع أجهزة قياس الضغط - استشارات غذائية - أنشطة رياضية",
+            expectedReturn: "تحسين التحكم في ضغط الدم - تقليل مضاعفات الضغط - خفض تكاليف الرعاية الصحية",
+            indicators: "مستويات ضغط الدم - عدد زيارات الطوارئ - معدل دخول المستشفى",
+            recommendations: "التوسع في البرنامج ليشمل جميع المناطق - توفير أجهزة قياس الضغط - تدريب مقدمي الرعاية الصحية",
+            roi: "298%"
+        },
+        {
+            id: 7,
+            title: "مشروع برنامج التوعية لمرض الكلى",
+            description: "برنامج توعوي شامل لمرضى الكلى يهدف إلى تحسين إدارة المرض وتقليل المضاعفات.",
+            target: "مرضى الكلى - الأشخاص المعرضين للإصابة - مقدمي الرعاية الصحية",
+            activities: "جلسات توعوية حول أمراض الكلى - فحوصات دورية - استشارات غذائية - تدريبات على الغسيل الكلوي",
+            expectedReturn: "تحسين إدارة مرض الكلى - تقليل الحاجة للغسيل الكلوي - خفض تكاليف العلاج",
+            indicators: "وظائف الكلى - عدد جلسات الغسيل الكلوي - معدل دخول المستشفى",
+            recommendations: "التوسع في البرنامج ليشمل جميع المناطق - توفير فحوصات مجانية - تدريب مقدمي الرعاية الصحية",
+            roi: "324%"
+        },
+        {
+            id: 8,
+            title: "مشروع التوعية لإصابات حوادث السيارات",
+            description: "برنامج توعوي للوقاية من إصابات حوادث السيارات وتحسين السلامة المرورية.",
+            target: "السائقون - الركاب - طلاب المدارس - المجتمع عامة",
+            activities: "حملات توعوية حول السلامة المرورية - توزيع مقاعد الأطفال - تدريبات على الإسعافات الأولية - محاضرات في المدارس",
+            expectedReturn: "تقليل إصابات حوادث السيارات - خفض الوفيات والإعاقات - تقليل تكاليف الرعاية الصحية",
+            indicators: "عدد الحوادث - عدد الإصابات والوفيات - استخدام حزام الأمان ومقاعد الأطفال",
+            recommendations: "التوسع في البرنامج ليشمل جميع المناطق - تعزيز القوانين المرورية - تدريب فرق الطوارئ",
+            roi: "356%"
+        }
+    ],
+    en: [
+        {
+            id: 1,
+            title: "Obesity Awareness Project",
+            description: "Obesity prevention awareness program aimed at reducing obesity rates among youth and adults through awareness of healthy nutrition and physical activity.",
+            target: "School and university students - Public sector employees",
+            activities: "Media and educational campaigns - Workshops with nutrition specialists - Free or subsidized sports programs - Distribution of awareness brochures",
+            expectedReturn: "Reduce obesity rates by 15-20% within 5 years - Decrease costs of treating obesity-related diseases - Increase individual productivity and reduce sick leave days",
+            indicators: "Measuring BMI before and after the program - Attendance and participation rate - Change in dietary and sports behavior",
+            recommendations: "Expand the program to include other areas - Integrate the program into primary care - Develop interactive digital awareness materials - Annual evaluation to measure health and financial impact",
+            roi: "233%"
+        },
+        {
+            id: 2,
+            title: "Smoking Awareness Project",
+            description: "Awareness program to reduce smoking rates and raise awareness of the harms of smoking.",
+            target: "Teenagers - School students - Employees",
+            activities: "Awareness lectures in schools and universities - Campaigns in media and social media - Providing support for quitting smoking (such as free clinics)",
+            expectedReturn: "Reduce the rate of new smokers - Reduce healthcare costs resulting from smoking-related diseases - Increase community health awareness - Reduce emergency visits by 30% - Reduce hospital admissions by 20%",
+            indicators: "Decrease in smoking rates during the program period - Number of participants in smoking cessation programs - Number of awareness sessions implemented",
+            recommendations: "Expand the program to include other areas - Integrate the program into primary care - Develop interactive digital awareness materials - Annual evaluation to measure health and financial impact",
+            roi: "367%"
+        },
+        {
+            id: 3,
+            title: "Diabetes Awareness Project",
+            description: "Comprehensive awareness program for diabetic patients aimed at improving disease management and reducing complications.",
+            target: "Diabetic patients - Their family members - Healthcare providers",
+            activities: "Awareness sessions on diabetes management - Distribution of blood sugar monitoring devices - Insulin injection training - Nutritional consultations",
+            expectedReturn: "Improved blood sugar control - Reduced diabetes complications - Lower healthcare costs - Improved quality of life",
+            indicators: "HbA1c levels - Number of emergency visits - Hospital admission rate",
+            recommendations: "Expand the program to cover all areas - Provide an electronic application for follow-up - Train healthcare providers",
+            roi: "289%"
+        },
+        {
+            id: 4,
+            title: "Anemia Awareness Project for Pregnant Women",
+            description: "Awareness program to prevent anemia in pregnant women and improve maternal and fetal health.",
+            target: "Pregnant women - Women of childbearing age - Healthcare providers",
+            activities: "Awareness sessions on nutrition - Distribution of iron supplements - Regular blood tests - Nutritional consultations",
+            expectedReturn: "Reduce anemia cases in pregnant women - Improve maternal and fetal health - Reduce pregnancy and childbirth complications",
+            indicators: "Hemoglobin levels - Preterm birth rate - Birth weight",
+            recommendations: "Expand the program to include all health centers - Provide free nutritional supplements - Train midwives",
+            roi: "312%"
+        },
+        {
+            id: 5,
+            title: "Birth Spacing Awareness Project",
+            description: "Awareness program to promote birth spacing and improve maternal and child health.",
+            target: "Couples - Women of childbearing age - Healthcare providers",
+            activities: "Awareness sessions on family planning - Distribution of contraceptives - Family counseling - Educational seminars",
+            expectedReturn: "Improved maternal and child health - Reduced maternal mortality - Improved economic situation for families",
+            indicators: "Contraceptive use rate - Interval between births - Health of mothers and children",
+            recommendations: "Expand the program to cover all areas - Provide free contraceptives - Train service providers",
+            roi: "275%"
+        },
+        {
+            id: 6,
+            title: "Hypertension Awareness Project",
+            description: "Awareness program for hypertension patients aimed at improving disease management and reducing complications.",
+            target: "Hypertension patients - Elderly - Healthcare providers",
+            activities: "Awareness sessions on blood pressure management - Distribution of blood pressure monitors - Nutritional consultations - Sports activities",
+            expectedReturn: "Improved blood pressure control - Reduced hypertension complications - Lower healthcare costs",
+            indicators: "Blood pressure levels - Number of emergency visits - Hospital admission rate",
+            recommendations: "Expand the program to cover all areas - Provide blood pressure monitors - Train healthcare providers",
+            roi: "298%"
+        },
+        {
+            id: 7,
+            title: "Kidney Disease Awareness Program",
+            description: "Comprehensive awareness program for kidney patients aimed at improving disease management and reducing complications.",
+            target: "Kidney patients - People at risk - Healthcare providers",
+            activities: "Awareness sessions on kidney diseases - Regular checkups - Nutritional consultations - Dialysis training",
+            expectedReturn: "Improved kidney disease management - Reduced need for dialysis - Lower treatment costs",
+            indicators: "Kidney function - Number of dialysis sessions - Hospital admission rate",
+            recommendations: "Expand the program to cover all areas - Provide free checkups - Train healthcare providers",
+            roi: "324%"
+        },
+        {
+            id: 8,
+            title: "Car Accident Injuries Awareness Project",
+            description: "Awareness program to prevent car accident injuries and improve road safety.",
+            target: "Drivers - Passengers - School students - General public",
+            activities: "Awareness campaigns on road safety - Distribution of child seats - First aid training - School lectures",
+            expectedReturn: "Reduce car accident injuries - Reduce deaths and disabilities - Lower healthcare costs",
+            indicators: "Number of accidents - Number of injuries and deaths - Use of seat belts and child seats",
+            recommendations: "Expand the program to cover all areas - Strengthen traffic laws - Train emergency teams",
+            roi: "356%"
+        }
+    ]
+};
+
+// نماذج إدخال البيانات الكاملة لكل نوع استثمار (تم تحديثها)
+const investmentForms = {
+    hospital: {
+        ar: [
+            { id: "hospital_name", label: "اسم المستشفى/العيادة", type: "text", placeholder: "أدخل اسم المؤسسة" },
+            { 
+                id: "institution_type", 
+                label: "نوع المؤسسة", 
+                type: "select", 
+                options: [
+                    { value: "profit", label: "ربحية (خاص)" },
+                    { value: "nonprofit", label: "غير ربحية (حكومية)" }
+                ]
+            },
+            { id: "patient_visits", label: "عدد زيارات المرضى سنوياً", type: "number", placeholder: "عدد الزيارات" },
+            { id: "avg_revenue_per_visit", label: "متوسط الإيراد لكل زيارة", type: "number", placeholder: "بالعملة المحلية (للمؤسسات الربحية)" },
+            { id: "staff_costs", label: "تكاليف الموظفين السنوية", type: "number", placeholder: "تكاليف الرواتب والمزايا" },
+            { id: "equipment_costs", label: "تكلفة المعدات الإجمالية", type: "number", placeholder: "تكاليف شراء المعدات" },
+            { id: "equipment_lifespan", label: "العمر الافتراضي للأجهزة (سنوات)", type: "number", placeholder: "10 سنوات افتراضياً", default: 10 },
+            { id: "facility_costs", label: "تكلفة المرافق الإجمالية", type: "number", placeholder: "تكاليف البناء والتشييد" },
+            { id: "facility_lifespan", label: "العمر الافتراضي للمرافق (سنوات)", type: "number", placeholder: "30 سنة افتراضياً", default: 30 },
+            { id: "medication_costs", label: "تكاليف الأدوية السنوية", type: "number", placeholder: "تكاليف شراء الأدوية" },
+            { id: "operational_costs", label: "تكاليف التشغيل السنوية", type: "number", placeholder: "كهرباء، ماء، صيانة، إلخ" },
+            { id: "other_costs", label: "تكاليف أخرى سنوية", type: "number", placeholder: "أي تكاليف إضافية" }
+        ],
+        en: [
+            { id: "hospital_name", label: "Hospital/Clinic Name", type: "text", placeholder: "Enter institution name" },
+            { 
+                id: "institution_type", 
+                label: "Institution Type", 
+                type: "select", 
+                options: [
+                    { value: "profit", label: "Profit (Private)" },
+                    { value: "nonprofit", label: "Non-Profit (Government)" }
+                ]
+            },
+            { id: "patient_visits", label: "Annual Patient Visits", type: "number", placeholder: "Number of visits" },
+            { id: "avg_revenue_per_visit", label: "Average Revenue Per Visit", type: "number", placeholder: "In local currency (for profit institutions)" },
+            { id: "staff_costs", label: "Annual Staff Costs", type: "number", placeholder: "Salaries and benefits" },
+            { id: "equipment_costs", label: "Total Equipment Cost", type: "number", placeholder: "Equipment purchase costs" },
+            { id: "equipment_lifespan", label: "Equipment Lifespan (Years)", type: "number", placeholder: "10 years by default", default: 10 },
+            { id: "facility_costs", label: "Total Facility Cost", type: "number", placeholder: "Construction and building costs" },
+            { id: "facility_lifespan", label: "Facility Lifespan (Years)", type: "number", placeholder: "30 years by default", default: 30 },
+            { id: "medication_costs", label: "Annual Medication Costs", type: "number", placeholder: "Medication purchases" },
+            { id: "operational_costs", label: "Annual Operational Costs", type: "number", placeholder: "Electricity, water, maintenance, etc." },
+            { id: "other_costs", label: "Other Annual Costs", type: "number", placeholder: "Any additional costs" }
+        ]
+    },
+    pharma: {
+        ar: [
+            { id: "drug_name", label: "اسم الدواء", type: "text", placeholder: "أدخل اسم الدواء" },
+            { id: "rd_costs", label: "تكاليف البحث والتطوير", type: "number", placeholder: "تكاليف البحث والتجارب" },
+            { id: "production_costs", label: "تكاليف الإنتاج السنوية", type: "number", placeholder: "تكاليف التصنيع" },
+            { id: "marketing_costs", label: "تكاليف التسويق السنوية", type: "number", placeholder: "تكاليف الإعلان والتسويق" },
+            { id: "distribution_costs", label: "تكاليف التوزيع السنوية", type: "number", placeholder: "تكاليف الشحن والتوزيع" },
+            { id: "units_sold", label: "الوحدات المباعة سنوياً", type: "number", placeholder: "عدد الوحدات المباعة سنوياً" },
+            { id: "price_per_unit", label: "سعر الوحدة", type: "number", placeholder: "سعر بيع الوحدة" },
+            { id: "regulatory_costs", label: "تكاليف تنظيمية سنوية", type: "number", placeholder: "تكاليف التراخيص والامتثال" }
+        ],
+        en: [
+            { id: "drug_name", label: "Drug Name", type: "text", placeholder: "Enter drug name" },
+            { id: "rd_costs", label: "R&D Costs", type: "number", placeholder: "Research and trial costs" },
+            { id: "production_costs", label: "Annual Production Costs", type: "number", placeholder: "Manufacturing costs" },
+            { id: "marketing_costs", label: "Annual Marketing Costs", type: "number", placeholder: "Advertising and marketing" },
+            { id: "distribution_costs", label: "Annual Distribution Costs", type: "number", placeholder: "Shipping and distribution" },
+            { id: "units_sold", label: "Annual Units Sold", type: "number", placeholder: "Annual units sold" },
+            { id: "price_per_unit", label: "Price Per Unit", type: "number", placeholder: "Selling price per unit" },
+            { id: "regulatory_costs", label: "Annual Regulatory Costs", type: "number", placeholder: "Licensing and compliance" }
+        ]
+    },
+    devices: {
+        ar: [
+            { id: "device_name", label: "اسم الجهاز الطبي", type: "text", placeholder: "أدخل اسم الجهاز" },
+            { id: "purchase_cost", label: "تكلفة الشراء", type: "number", placeholder: "تكلفة شراء الجهاز" },
+            { id: "maintenance_cost", label: "تكاليف الصيانة السنوية", type: "number", placeholder: "تكاليف الصيانة والتشغيل" },
+            { id: "training_cost", label: "تكاليف التدريب", type: "number", placeholder: "تكاليف تدريب الموظفين" },
+            { id: "procedures_per_year", label: "عدد الإجراءات سنوياً", type: "number", placeholder: "عدد مرات استخدام الجهاز" },
+            { id: "revenue_per_procedure", label: "الإيراد لكل إجراء", type: "number", placeholder: "الإيراد من كل استخدام للجهاز" },
+            { id: "device_lifespan", label: "العمر الافتراضي للجهاز (سنوات)", type: "number", placeholder: "عدد سنوات استخدام الجهاز" },
+            { id: "staff_cost_per_procedure", label: "تكلفة الموظفين لكل إجراء", type: "number", placeholder: "تكلفة الوقت الطبي لكل إجراء" },
+            { id: "utility_cost_per_procedure", label: "تكلفة الخدمات لكل إجراء", type: "number", placeholder: "كهرباء، ماء، إنترنت لكل إجراء" },
+            { id: "other_device_costs", label: "تكاليف أخرى سنوية", type: "number", placeholder: "أي تكاليف إضافية" }
+        ],
+        en: [
+            { id: "device_name", label: "Medical Device Name", type: "text", placeholder: "Enter device name" },
+            { id: "purchase_cost", label: "Purchase Cost", type: "number", placeholder: "Device purchase cost" },
+            { id: "maintenance_cost", label: "Annual Maintenance Cost", type: "number", placeholder: "Maintenance and operation" },
+            { id: "training_cost", label: "Training Costs", type: "number", placeholder: "Staff training costs" },
+            { id: "procedures_per_year", label: "Procedures Per Year", type: "number", placeholder: "Number of device uses" },
+            { id: "revenue_per_procedure", label: "Revenue Per Procedure", type: "number", placeholder: "Revenue per device use" },
+            { id: "device_lifespan", label: "Device Lifespan (Years)", type: "number", placeholder: "Years of device usage" },
+            { id: "staff_cost_per_procedure", label: "Staff Cost Per Procedure", type: "number", placeholder: "Medical time cost per procedure" },
+            { id: "utility_cost_per_procedure", label: "Utility Cost Per Procedure", type: "number", placeholder: "Electricity, water, internet per procedure" },
+            { id: "other_device_costs", label: "Other Annual Costs", type: "number", placeholder: "Any additional costs" }
+        ]
+    },
+    nonfinancial: {
+        ar: [
+            { id: "program_name", label: "اسم البرنامج", type: "text", placeholder: "أدخل اسم برنامج التوعية الصحية" },
+            { id: "program_cost", label: "تكلفة البرنامج", type: "number", placeholder: "التكلفة الإجمالية للبرنامج" },
+            { id: "avoided_treatment_costs", label: "التكاليف العلاجية المتجنبة", type: "number", placeholder: "قيمة التكاليف العلاجية التي تم تجنبها" },
+            { id: "avoided_cases", label: "عدد الحالات المتجنبة", type: "number", placeholder: "عدد الحالات التي تم منعها" },
+            { id: "qaly_gained", label: "QALY المكتسبة", type: "number", placeholder: "سنوات الحياة المعدلة بالجودة المكتسبة" },
+            { id: "program_duration", label: "مدة البرنامج (سنوات)", type: "number", placeholder: "عدد سنوات تنفيذ البرنامج", default: 1 }
+        ],
+        en: [
+            { id: "program_name", label: "Program Name", type: "text", placeholder: "Enter health awareness program name" },
+            { id: "program_cost", label: "Program Cost", type: "number", placeholder: "Total program cost" },
+            { id: "avoided_treatment_costs", label: "Avoided Treatment Costs", type: "number", placeholder: "Value of avoided treatment costs" },
+            { id: "avoided_cases", label: "Avoided Cases", type: "number", placeholder: "Number of cases prevented" },
+            { id: "qaly_gained", label: "QALY Gained", type: "number", placeholder: "Quality-Adjusted Life Years gained" },
+            { id: "program_duration", label: "Program Duration (Years)", type: "number", placeholder: "Number of program implementation years", default: 1 }
+        ]
+    }
+};
+
+// المتغيرات العامة
+let currentLang = 'ar';
+let currentInvestment = null;
+let investmentHistory = [];
+let customIndicators = [];
+let chartInstances = {};
+let savedProjects = [];
+
+// الحصول على المشاريع المحفوظة من localStorage عند التحميل
+try {
+    if (typeof localStorage !== 'undefined') {
+        const storedHistory = localStorage.getItem('healthROIHistory');
+        if (storedHistory) {
+            investmentHistory = JSON.parse(storedHistory);
+        }
+        
+        const storedIndicators = localStorage.getItem('healthROICustomIndicators');
+        if (storedIndicators) {
+            customIndicators = JSON.parse(storedIndicators);
+        }
+        
+        const storedSavedProjects = localStorage.getItem('healthROISavedProjects');
+        if (storedSavedProjects) {
+            savedProjects = JSON.parse(storedSavedProjects);
+        }
+    }
+} catch (e) {
+    console.warn('LocalStorage access denied or not supported', e);
+}
+
+// وظيفة تسجيل الدخول
+function doLogin() {
+    const usernameInput = document.getElementById('loginUser');
+    const passwordInput = document.getElementById('loginPass');
+    
+    if (!usernameInput || !passwordInput) return;
+
+    const username = usernameInput.value.trim().toLowerCase();
+    const password = passwordInput.value.trim().toLowerCase();
+    
+    if (username === 'moh' && password === 'moh') {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainLayout').style.display = 'flex';
+        setLangTexts();
+        showSection('home');
+    } else {
+        alert(currentLang === 'ar' ? 'اسم المستخدم أو كلمة المرور غير صحيحة' : 'Invalid username or password');
+    }
+}
+
+// وظيفة تعيين النصوص
+function setLangTexts() {
+    const t = text[currentLang];
+    document.getElementById('appTitle').textContent = t.appTitle;
+    document.getElementById('appSub').textContent = t.appSub;
+    document.getElementById('topTitle').textContent = t.topTitle;
+    document.getElementById('topMeta').textContent = t.topMeta;
+    document.getElementById('homeHeroTitle').textContent = t.homeHeroTitle;
+    document.getElementById('homeHeroSub').textContent = t.homeHeroSub;
+    document.getElementById('selectTitle').textContent = t.selectTitle;
+    document.getElementById('selectSub').textContent = t.selectSub;
+    document.getElementById('cardHospitalTitle').textContent = t.cardHospitalTitle;
+    document.getElementById('cardHospitalSub').textContent = t.cardHospitalSub;
+    document.getElementById('cardPharmaTitle').textContent = t.cardPharmaTitle;
+    document.getElementById('cardPharmaSub').textContent = t.cardPharmaSub;
+    document.getElementById('cardDevicesTitle').textContent = t.cardDevicesTitle;
+    document.getElementById('cardDevicesSub').textContent = t.cardDevicesSub;
+    document.getElementById('cardNFTitle').textContent = t.cardNFTitle;
+    document.getElementById('cardNFSub').textContent = t.cardNFSub;
+    document.getElementById('inputTitle').textContent = t.inputTitle;
+    document.getElementById('inputSub').textContent = t.inputSub;
+    document.getElementById('resultTitle').textContent = t.resultTitle;
+    document.getElementById('resultSub').textContent = t.resultSub;
+    document.getElementById('reportsTitle').textContent = t.reportsTitle;
+    document.getElementById('reportsSub').textContent = t.reportsSub;
+    document.getElementById('aboutTitle').textContent = t.aboutTitle;
+    document.getElementById('aboutText').textContent = t.aboutText;
+    document.getElementById('teamTitle').textContent = t.teamTitle;
+    document.getElementById('projectsTabTitle').textContent = t.projectsTabTitle;
+    const horizontalProjectsTab = document.getElementById('horizontalProjectsTabTitle');
+    if (horizontalProjectsTab) horizontalProjectsTab.textContent = t.projectsTabTitle;
+    const projectsSectionTitle = document.getElementById('projectsSectionTitle');
+    if (projectsSectionTitle) projectsSectionTitle.textContent = t.projectsSectionTitle;
+    const projectsSectionSub = document.getElementById('projectsSectionSub');
+    if (projectsSectionSub) projectsSectionSub.textContent = t.projectsSectionSub;
+    document.getElementById('labelRevenue').textContent = t.labelRevenue;
+    document.getElementById('labelCost').textContent = t.labelCost;
+    document.getElementById('labelProfit').textContent = t.labelProfit;
+    document.getElementById('labelROI').textContent = t.labelROI;
+    document.getElementById('nfResultsTitle').textContent = t.nfResultsTitle;
+    document.getElementById('nfResultsTip').textContent = t.nfResultsTip;
+    document.getElementById('financialReportTitle').textContent = t.financialReportTitle;
+    document.getElementById('financialReportSub').textContent = t.financialReportSub;
+    document.getElementById('comparisonReportTitle').textContent = t.comparisonReportTitle;
+    document.getElementById('comparisonReportSub').textContent = t.comparisonReportSub;
+    document.getElementById('riskReportTitle').textContent = t.riskReportTitle;
+    document.getElementById('riskReportSub').textContent = t.riskReportSub;
+    document.getElementById('savedProjectsTitle').textContent = t.savedProjectsTitle;
+    document.getElementById('savedProjectsSub').textContent = t.savedProjectsSub;
+}
+
+// وظيفة تبديل اللغة
+function switchLang() {
+    currentLang = currentLang === 'ar' ? 'en' : 'ar';
+    document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    setLangTexts();
+    
+    // إعادة تحميل المشاريع عند تغيير اللغة
+    const projectsSection = document.getElementById('projectsSection');
+    if (projectsSection && projectsSection.style.display !== 'none') {
+        loadProjectsSection();
+    }
+    
+    if (currentInvestment) {
+        loadInvestmentForm(currentInvestment);
+    }
+    
+    // إعادة إنشاء الرسوم البيانية مع اللغة الجديدة
+    if (document.getElementById('financialReportDetail').style.display !== 'none') {
+        createFinancialCharts();
+    } else if (document.getElementById('comparisonReportDetail').style.display !== 'none') {
+        createComparisonCharts();
+    } else if (document.getElementById('riskReportDetail').style.display !== 'none') {
+        createRiskCharts();
+    }
+    
+    // إعادة تحميل المشاريع المحفوظة
+    const savedProjectsSection = document.getElementById('savedProjectsSection');
+    if (savedProjectsSection && savedProjectsSection.style.display !== 'none') {
+        loadSavedProjects();
+    }
+}
+
+// وظيفة عرض القسم
+function showSection(sectionId) {
+    // إخفاء جميع الأقسام
+    const sections = ['home', 'selection', 'input', 'dashboard', 'reports', 'projects', 'about', 'team', 'savedProjects'];
+    sections.forEach(section => {
+        const sectionEl = document.getElementById(section + 'Section');
+        if (sectionEl) sectionEl.style.display = 'none';
+    });
+    
+    // إخفاء صفحات التقارير التفصيلية
+    const reportPages = ['financialReportDetail', 'comparisonReportDetail', 'riskReportDetail'];
+    reportPages.forEach(page => {
+        const pageEl = document.getElementById(page);
+        if (pageEl) pageEl.style.display = 'none';
+    });
+    
+    // إظهار القسم المحدد
+    const targetSection = document.getElementById(sectionId + 'Section');
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        
+        // تحميل المشاريع إذا كان القسم هو projects
+        if (sectionId === 'projects') {
+            loadProjectsSection();
+        }
+        
+        // تحميل المشاريع المحفوظة إذا كان القسم هو savedProjects
+        if (sectionId === 'savedProjects') {
+            loadSavedProjects();
+        }
+    }
+    
+    // تحديث القوائم النشطة
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.horizontal-tab').forEach(item => item.classList.remove('active'));
+    
+    // تحديث الشريط الجانبي
+    const navMap = {
+        'home': 'الصفحة الرئيسية',
+        'dashboard': 'لوحة التحكم',
+        'savedProjects': 'المشاريع المحفوظة',
+        'reports': 'التقارير والتحليل',
+        'about': 'حول المنصة',
+        'team': 'من نحن'
+    };
+    
+    const activeNavText = navMap[sectionId];
+    if (activeNavText) {
+        const activeNavItem = Array.from(document.querySelectorAll('.nav-item')).find(item => 
+            item.textContent.includes(activeNavText)
+        );
+        if (activeNavItem) activeNavItem.classList.add('active');
+    }
+    
+    // تحديث الشريط الأفقي
+    if (sectionId === 'projects') {
+        const projectsTab = document.querySelector('.horizontal-tab[onclick*="projects"]');
+        if (projectsTab) projectsTab.classList.add('active');
+    } else {
+        const tabMap = {
+            'home': 'الصفحة الرئيسية',
+            'selection': 'حساب ROI',
+            'reports': 'التقارير والتحليل'
+        };
+        
+        const activeTabText = tabMap[sectionId];
+        if (activeTabText) {
+            const activeTab = Array.from(document.querySelectorAll('.horizontal-tab')).find(item => {
+                const span = item.querySelector('span');
+                return span && (span.textContent.includes(activeTabText) || activeTabText.includes(span.textContent));
+            });
+            if (activeTab) activeTab.classList.add('active');
+        }
+    }
+}
+
+// وظائف عرض التقارير التفصيلية
+function showReportDetail(reportType) {
+    if (reportType === 'back') {
+        showSection('reports');
+        return;
+    }
+    
+    // إخفاء جميع الأقسام
+    const sections = ['home', 'selection', 'input', 'dashboard', 'reports', 'projects', 'about', 'team', 'savedProjects'];
+    sections.forEach(section => {
+        const sectionEl = document.getElementById(section + 'Section');
+        if (sectionEl) sectionEl.style.display = 'none';
+    });
+    
+    // إخفاء جميع صفحات التقارير التفصيلية
+    const reportPages = ['financialReportDetail', 'comparisonReportDetail', 'riskReportDetail'];
+    reportPages.forEach(page => {
+        const pageEl = document.getElementById(page);
+        if (pageEl) pageEl.style.display = 'none';
+    });
+    
+    // إظهار صفحة التقرير المحددة
+    let targetPage = '';
+    switch(reportType) {
+        case 'financial':
+            targetPage = 'financialReportDetail';
+            createFinancialCharts();
+            break;
+        case 'comparison':
+            targetPage = 'comparisonReportDetail';
+            createComparisonCharts();
+            break;
+        case 'risk':
+            targetPage = 'riskReportDetail';
+            createRiskCharts();
+            break;
+    }
+    
+    if (targetPage) {
+        const pageEl = document.getElementById(targetPage);
+        if (pageEl) {
+            pageEl.style.display = 'block';
+            
+            // تحديث التبويبات النشطة
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.horizontal-tab').forEach(item => item.classList.remove('active'));
+            
+            // تحديد التبويب النشط في الشريط الجانبي
+            const reportsNavItem = Array.from(document.querySelectorAll('.nav-item')).find(item => 
+                item.textContent.includes('التقارير والتحليل') || item.textContent.includes('Reports & Analysis')
+            );
+            if (reportsNavItem) reportsNavItem.classList.add('active');
+            
+            // تحديد التبويب النشط في الشريط الأفقي
+            const reportsHorizontalTab = Array.from(document.querySelectorAll('.horizontal-tab')).find(item => {
+                const span = item.querySelector('span');
+                return span && (span.textContent.includes('التقارير والتحليل') || span.textContent.includes('Reports & Analysis'));
+            });
+            if (reportsHorizontalTab) reportsHorizontalTab.classList.add('active');
+        }
+    }
+}
+
+// وظائف الرسوم البيانية للتقارير التفصيلية
+function createFinancialCharts() {
+    // تدمير الرسوم البيانية القديمة إذا كانت موجودة
+    if (chartInstances.costDistributionChart) chartInstances.costDistributionChart.destroy();
+    if (chartInstances.performanceTrendChart) chartInstances.performanceTrendChart.destroy();
+    if (chartInstances.profitabilityChart) chartInstances.profitabilityChart.destroy();
+    
+    // الحصول على أحدث بيانات الحساب
+    const latestCalc = investmentHistory[0];
+    const t = currentLang === 'ar' ? text.ar : text.en;
+    
+    // مخطط توزيع التكاليف
+    const costCtx = document.getElementById('costDistributionChart').getContext('2d');
+    const costLabels = currentLang === 'ar' 
+        ? ['تكاليف الموظفين', 'تكاليف المعدات', 'تكاليف المرافق', 'تكاليف الأدوية', 'تكاليف التشغيل', 'تكاليف أخرى']
+        : ['Staff Costs', 'Equipment Costs', 'Facility Costs', 'Medication Costs', 'Operational Costs', 'Other Costs'];
+    
+    const costData = latestCalc ? [
+        latestCalc.data.staff_costs || 0,
+        latestCalc.data.equipment_costs / (latestCalc.data.equipment_lifespan || 10) || 0,
+        latestCalc.data.facility_costs / (latestCalc.data.facility_lifespan || 30) || 0,
+        latestCalc.data.medication_costs || 0,
+        latestCalc.data.operational_costs || 0,
+        latestCalc.data.other_costs || 0
+    ] : [250000, 15000, 10000, 120000, 80000, 50000];
+    
+    chartInstances.costDistributionChart = new Chart(costCtx, {
+        type: 'pie',
+        data: {
+            labels: costLabels,
+            datasets: [{
+                data: costData,
+                backgroundColor: [
+                    '#0b3a5a',
+                    '#145f8c',
+                    '#1a936f',
+                    '#2bbd91',
+                    '#ff6b6b',
+                    '#ff9f43'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'توزيع التكاليف السنوية' : 'Annual Cost Distribution',
+                    font: { size: 16 }
+                }
+            }
+        }
+    });
+    
+    // مخطط اتجاهات الأداء المالي
+    const trendCtx = document.getElementById('performanceTrendChart').getContext('2d');
+    const months = currentLang === 'ar' 
+        ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+        : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // بيانات عينة
+    const revenueData = latestCalc ? 
+        Array.from({length: 12}, (_, i) => (latestCalc.results.totalRevenue / 12) * (0.8 + Math.random() * 0.4)) :
+        [1200000, 1350000, 1420000, 1550000, 1680000, 1800000, 1750000, 1900000, 1850000, 2000000, 2100000, 2200000];
+    
+    const costDataTrend = latestCalc ?
+        Array.from({length: 12}, (_, i) => (latestCalc.results.totalCost / 12) * (0.9 + Math.random() * 0.2)) :
+        [850000, 920000, 880000, 950000, 1020000, 1100000, 1050000, 1150000, 1120000, 1200000, 1250000, 1300000];
+    
+    const profitData = revenueData.map((rev, i) => rev - costDataTrend[i]);
+    
+    chartInstances.performanceTrendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: months.slice(0, revenueData.length),
+            datasets: [
+                {
+                    label: currentLang === 'ar' ? 'الإيرادات' : 'Revenue',
+                    data: revenueData,
+                    borderColor: '#1a936f',
+                    backgroundColor: 'rgba(26, 147, 111, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                },
+                {
+                    label: currentLang === 'ar' ? 'التكاليف' : 'Costs',
+                    data: costDataTrend,
+                    borderColor: '#0b3a5a',
+                    backgroundColor: 'rgba(11, 58, 90, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                },
+                {
+                    label: currentLang === 'ar' ? 'صافي الربح' : 'Net Profit',
+                    data: profitData,
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'اتجاهات الأداء المالي الشهرية' : 'Monthly Financial Performance Trends',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return formatNumber(value);
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // مخطط مؤشرات الربحية
+    const profitCtx = document.getElementById('profitabilityChart').getContext('2d');
+    const profitabilityLabels = currentLang === 'ar' 
+        ? ['هامش الربح %', 'العائد على الاستثمار %', 'العائد على الأصول %', 'هامش الربح التشغيلي %']
+        : ['Profit Margin %', 'ROI %', 'ROA %', 'Operating Margin %'];
+    
+    const profitabilityData = latestCalc ? [
+        latestCalc.results.totalRevenue > 0 ? (latestCalc.results.netProfit / latestCalc.results.totalRevenue) * 100 : 0,
+        latestCalc.results.roi,
+        Math.random() * 15 + 5,
+        Math.random() * 20 + 8
+    ] : [25, 32, 12, 18];
+    
+    chartInstances.profitabilityChart = new Chart(profitCtx, {
+        type: 'bar',
+        data: {
+            labels: profitabilityLabels,
+            datasets: [{
+                label: currentLang === 'ar' ? 'النسبة المئوية (%)' : 'Percentage (%)',
+                data: profitabilityData,
+                backgroundColor: [
+                    '#0b3a5a',
+                    '#145f8c',
+                    '#1a936f',
+                    '#2bbd91'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'مؤشرات الربحية' : 'Profitability Indicators',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createComparisonCharts() {
+    // تدمير الرسوم البيانية القديمة إذا كانت موجودة
+    if (chartInstances.roiComparisonChart) chartInstances.roiComparisonChart.destroy();
+    if (chartInstances.profitComparisonChart) chartInstances.profitComparisonChart.destroy();
+    if (chartInstances.timelineComparisonChart) chartInstances.timelineComparisonChart.destroy();
+    
+    // الحصول على بيانات من السجل
+    const t = currentLang === 'ar' ? text.ar : text.en;
+    const historyTypes = {};
+    
+    // تجميع البيانات حسب النوع
+    investmentHistory.forEach(calc => {
+        if (!historyTypes[calc.type]) {
+            historyTypes[calc.type] = [];
+        }
+        historyTypes[calc.type].push(calc);
+    });
+    
+    // مخطط مقارنة العوائد على الاستثمار
+    const roiCtx = document.getElementById('roiComparisonChart').getContext('2d');
+    const investmentTypes = currentLang === 'ar' 
+        ? ['المستشفيات', 'الأدوية', 'الأجهزة الطبية', 'العوائد غير المالية']
+        : ['Hospitals', 'Pharmaceuticals', 'Medical Devices', 'Non-Financial'];
+    
+    // حساب متوسط ROI لكل نوع
+    const avgROI = [
+        historyTypes['hospital'] ? historyTypes['hospital'].reduce((sum, calc) => sum + calc.results.roi, 0) / historyTypes['hospital'].length : 32,
+        historyTypes['pharma'] ? historyTypes['pharma'].reduce((sum, calc) => sum + calc.results.roi, 0) / historyTypes['pharma'].length : 45,
+        historyTypes['devices'] ? historyTypes['devices'].reduce((sum, calc) => sum + calc.results.roi, 0) / historyTypes['devices'].length : 28,
+        historyTypes['nonfinancial'] ? historyTypes['nonfinancial'].reduce((sum, calc) => sum + calc.results.roi, 0) / historyTypes['nonfinancial'].length : 38
+    ];
+    
+    // إذا كانت البيانات غير متوفرة، استخدم بيانات افتراضية
+    const roiData = avgROI.map((roi, i) => isNaN(roi) ? [32, 45, 28, 38][i] : roi);
+    
+    chartInstances.roiComparisonChart = new Chart(roiCtx, {
+        type: 'bar',
+        data: {
+            labels: investmentTypes,
+            datasets: [
+                {
+                    label: currentLang === 'ar' ? 'متوسط العائد على الاستثمار (%)' : 'Average ROI (%)',
+                    data: roiData,
+                    backgroundColor: '#1a936f'
+                },
+                {
+                    label: currentLang === 'ar' ? 'متوسط الصناعة (%)' : 'Industry Average (%)',
+                    data: [25, 30, 22, 25],
+                    backgroundColor: '#0b3a5a'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'مقارنة العوائد على الاستثمار' : 'ROI Comparison',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // مخطط مقارنة صافي الأرباح
+    const profitCtx = document.getElementById('profitComparisonChart').getContext('2d');
+    
+    // حساب متوسط صافي الربح لكل نوع
+    const avgProfit = [
+        historyTypes['hospital'] ? historyTypes['hospital'].reduce((sum, calc) => sum + calc.results.netProfit, 0) / historyTypes['hospital'].length : 1250000,
+        historyTypes['pharma'] ? historyTypes['pharma'].reduce((sum, calc) => sum + calc.results.netProfit, 0) / historyTypes['pharma'].length : 1850000,
+        historyTypes['devices'] ? historyTypes['devices'].reduce((sum, calc) => sum + calc.results.netProfit, 0) / historyTypes['devices'].length : 950000,
+        historyTypes['nonfinancial'] ? historyTypes['nonfinancial'].reduce((sum, calc) => sum + calc.results.netProfit, 0) / historyTypes['nonfinancial'].length : 750000
+    ];
+    
+    const avgCost = [
+        historyTypes['hospital'] ? historyTypes['hospital'].reduce((sum, calc) => sum + calc.results.totalCost, 0) / historyTypes['hospital'].length : 850000,
+        historyTypes['pharma'] ? historyTypes['pharma'].reduce((sum, calc) => sum + calc.results.totalCost, 0) / historyTypes['pharma'].length : 1200000,
+        historyTypes['devices'] ? historyTypes['devices'].reduce((sum, calc) => sum + calc.results.totalCost, 0) / historyTypes['devices'].length : 680000,
+        historyTypes['nonfinancial'] ? historyTypes['nonfinancial'].reduce((sum, calc) => sum + calc.results.totalCost, 0) / historyTypes['nonfinancial'].length : 550000
+    ];
+    
+    // إذا كانت البيانات غير متوفرة، استخدم بيانات افتراضية
+    const profitData = avgProfit.map((profit, i) => isNaN(profit) ? [1250000, 1850000, 950000, 750000][i] : profit);
+    const costData = avgCost.map((cost, i) => isNaN(cost) ? [850000, 1200000, 680000, 550000][i] : cost);
+    
+    chartInstances.profitComparisonChart = new Chart(profitCtx, {
+        type: 'bar',
+        data: {
+            labels: investmentTypes,
+            datasets: [
+                {
+                    label: currentLang === 'ar' ? 'متوسط صافي الربح' : 'Average Net Profit',
+                    data: profitData,
+                    backgroundColor: '#145f8c'
+                },
+                {
+                    label: currentLang === 'ar' ? 'متوسط التكاليف' : 'Average Costs',
+                    data: costData,
+                    backgroundColor: '#ff6b6b'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'مقارنة صافي الأرباح والتكاليف' : 'Net Profit and Costs Comparison',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return formatNumber(value);
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // مخطط تطور الأداء عبر الزمن
+    const timelineCtx = document.getElementById('timelineComparisonChart').getContext('2d');
+    const quarters = currentLang === 'ar' 
+        ? ['الربع الأول', 'الربع الثاني', 'الربع الثالث', 'الربع الرابع']
+        : ['Q1', 'Q2', 'Q3', 'Q4'];
+    
+    chartInstances.timelineComparisonChart = new Chart(timelineCtx, {
+        type: 'line',
+        data: {
+            labels: quarters,
+            datasets: [
+                {
+                    label: currentLang === 'ar' ? 'المستشفيات' : 'Hospitals',
+                    data: [22, 28, 32, 35],
+                    borderColor: '#0b3a5a',
+                    backgroundColor: 'rgba(11, 58, 90, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                },
+                {
+                    label: currentLang === 'ar' ? 'الأدوية' : 'Pharmaceuticals',
+                    data: [30, 38, 42, 45],
+                    borderColor: '#1a936f',
+                    backgroundColor: 'rgba(26, 147, 111, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                },
+                {
+                    label: currentLang === 'ar' ? 'الأجهزة الطبية' : 'Medical Devices',
+                    data: [20, 24, 26, 28],
+                    borderColor: '#145f8c',
+                    backgroundColor: 'rgba(20, 95, 140, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                },
+                {
+                    label: currentLang === 'ar' ? 'العوائد غير المالية' : 'Non-Financial',
+                    data: [25, 32, 35, 38],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'تطور الأداء عبر الزمن' : 'Performance Evolution Over Time',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createRiskCharts() {
+    // تدمير الرسوم البيانية القديمة إذا كانت موجودة
+    if (chartInstances.riskMapChart) chartInstances.riskMapChart.destroy();
+    if (chartInstances.riskLevelChart) chartInstances.riskLevelChart.destroy();
+    if (chartInstances.riskSensitivityChart) chartInstances.riskSensitivityChart.destroy();
+    
+    const t = currentLang === 'ar' ? text.ar : text.en;
+    
+    // مخطط خريطة المخاطر
+    const riskMapCtx = document.getElementById('riskMapChart').getContext('2d');
+    const riskCategories = currentLang === 'ar' 
+        ? ['المخاطر المالية', 'المخاطر التشغيلية', 'المخاطر التنظيمية', 'المخاطر التكنولوجية', 'المخاطر السوقية', 'المخاطر الصحية']
+        : ['Financial Risks', 'Operational Risks', 'Regulatory Risks', 'Technological Risks', 'Market Risks', 'Health Risks'];
+    
+    // بيانات مخاطر عشوائية بناءً على نوع الاستثمار الأخير
+    const latestCalc = investmentHistory[0];
+    let baseRiskLevel = 60;
+    
+    if (latestCalc) {
+        switch(latestCalc.type) {
+            case 'hospital':
+                baseRiskLevel = 65;
+                break;
+            case 'pharma':
+                baseRiskLevel = 75;
+                break;
+            case 'devices':
+                baseRiskLevel = 70;
+                break;
+            case 'nonfinancial':
+                baseRiskLevel = 55;
+                break;
+        }
+    }
+    
+    const currentRisks = riskCategories.map(() => baseRiskLevel + Math.random() * 20 - 10);
+    const targetRisks = riskCategories.map(() => 85 + Math.random() * 10);
+    
+    chartInstances.riskMapChart = new Chart(riskMapCtx, {
+        type: 'radar',
+        data: {
+            labels: riskCategories,
+            datasets: [
+                {
+                    label: currentLang === 'ar' ? 'المستوى الحالي' : 'Current Level',
+                    data: currentRisks,
+                    backgroundColor: 'rgba(26, 147, 111, 0.2)',
+                    borderColor: '#1a936f',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#1a936f'
+                },
+                {
+                    label: currentLang === 'ar' ? 'المستوى المستهدف' : 'Target Level',
+                    data: targetRisks,
+                    backgroundColor: 'rgba(11, 58, 90, 0.2)',
+                    borderColor: '#0b3a5a',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#0b3a5a'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'خريطة المخاطر' : 'Risk Map',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // مخطط توزيع مستويات المخاطرة
+    const riskLevelCtx = document.getElementById('riskLevelChart').getContext('2d');
+    const riskLevelLabels = currentLang === 'ar' 
+        ? ['منخفضة', 'متوسطة', 'مرتفعة', 'حرجة']
+        : ['Low', 'Medium', 'High', 'Critical'];
+    
+    chartInstances.riskLevelChart = new Chart(riskLevelCtx, {
+        type: 'doughnut',
+        data: {
+            labels: riskLevelLabels,
+            datasets: [{
+                data: [35, 40, 20, 5],
+                backgroundColor: [
+                    '#1a936f',
+                    '#145f8c',
+                    '#ff6b6b',
+                    '#dc3545'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    rtl: currentLang === 'ar'
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'توزيع مستويات المخاطرة' : 'Risk Level Distribution',
+                    font: { size: 16 }
+                }
+            }
+        }
+    });
+    
+    // مخطط تحليل حساسية المخاطر
+    const sensitivityCtx = document.getElementById('riskSensitivityChart').getContext('2d');
+    const scenarios = currentLang === 'ar' 
+        ? ['السيناريو الأساسي', '-10% الطلب', '+10% التكاليف', '-15% السعر', '+20% المنافسة', '-5% التمويل']
+        : ['Base Scenario', '-10% Demand', '+10% Costs', '-15% Price', '+20% Competition', '-5% Funding'];
+    
+    // حساب تأثيرات المخاطر بناءً على آخر حساب
+    let baseROI = 32;
+    if (latestCalc && latestCalc.results.roi) {
+        baseROI = latestCalc.results.roi;
+    }
+    
+    const impactData = [
+        baseROI,
+        baseROI * 0.78,
+        baseROI * 0.85,
+        baseROI * 0.72,
+        baseROI * 0.80,
+        baseROI * 0.90
+    ];
+    
+    chartInstances.riskSensitivityChart = new Chart(sensitivityCtx, {
+        type: 'bar',
+        data: {
+            labels: scenarios,
+            datasets: [{
+                label: currentLang === 'ar' ? 'تأثير على العائد على الاستثمار (%)' : 'Impact on ROI (%)',
+                data: impactData,
+                backgroundColor: [
+                    '#1a936f',
+                    '#145f8c',
+                    '#ff6b6b',
+                    '#ff9f43',
+                    '#7467ef',
+                    '#9c27b0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: currentLang === 'ar' ? 'تحليل حساسية المخاطر' : 'Risk Sensitivity Analysis',
+                    font: { size: 16 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(1) + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// وظائف التحكم بالرسوم البيانية
+function updateChartType(chartId, newType) {
+    if (chartInstances[chartId]) {
+        chartInstances[chartId].destroy();
+        
+        const ctx = document.getElementById(chartId).getContext('2d');
+        const oldChart = chartInstances[chartId];
+        
+        // إنشاء مخطط جديد بنفس البيانات ولكن بنوع مختلف
+        chartInstances[chartId] = new Chart(ctx, {
+            type: newType,
+            data: oldChart.data,
+            options: oldChart.options
+        });
+    }
+}
+
+function downloadChart(chartId) {
+    if (chartInstances[chartId]) {
+        const link = document.createElement('a');
+        link.download = chartId + '.png';
+        link.href = chartInstances[chartId].toBase64Image();
+        link.click();
+    }
+}
+
+// وظائف المشاريع
+function loadProjectsSection() {
+    const projectsGrid = document.getElementById('projectsSectionGrid');
+    if (!projectsGrid) return;
+    
+    const projects = projectsData[currentLang];
+    
+    projectsGrid.innerHTML = '';
+    
+    projects.forEach(project => {
+        const projectCard = document.createElement('div');
+        projectCard.className = 'project-tab-card';
+        projectCard.onclick = () => showProjectDetailsStandalone(project.id);
+        
+        projectCard.innerHTML = `
+            <h3>${project.title}</h3>
+            <p>${project.description.substring(0, 100)}...</p>
+            <div class="project-tab-roi">ROI: ${project.roi}</div>
+        `;
+        
+        projectsGrid.appendChild(projectCard);
+    });
+}
+
+function showProjectDetailsStandalone(projectId) {
+    const project = projectsData[currentLang].find(p => p.id === projectId);
+    if (!project) return;
+    
+    const projectDetailsSection = document.getElementById('projectDetailsSectionStandalone');
+    if (!projectDetailsSection) return;
+    
+    projectDetailsSection.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-project-diagram"></i> ${project.title}</h2>
+            </div>
+            <p>${project.description}</p>
+            <div class="project-details">
+                <div class="project-detail-item">
+                    <div class="project-detail-label">${currentLang === 'ar' ? 'الفئة المستهدفة:' : 'Target Group:'}</div>
+                    <div class="project-detail-value">${project.target || ''}</div>
+                </div>
+                <div class="project-detail-item">
+                    <div class="project-detail-label">${currentLang === 'ar' ? 'الأنشطة:' : 'Activities:'}</div>
+                    <div class="project-detail-value">${project.activities || ''}</div>
+                </div>
+                <div class="project-detail-item">
+                    <div class="project-detail-label">${currentLang === 'ar' ? 'العائد المتوقع:' : 'Expected Return:'}</div>
+                    <div class="project-detail-value">${project.expectedReturn || ''}</div>
+                </div>
+                <div class="project-detail-item">
+                    <div class="project-detail-label">${currentLang === 'ar' ? 'المؤشرات:' : 'Indicators:'}</div>
+                    <div class="project-detail-value">${project.indicators || ''}</div>
+                </div>
+                <div class="project-detail-item">
+                    <div class="project-detail-label">${currentLang === 'ar' ? 'التوصيات:' : 'Recommendations:'}</div>
+                    <div class="project-detail-value">${project.recommendations || ''}</div>
+                </div>
+            </div>
+            <div class="project-roi">
+                ${currentLang === 'ar' ? 'العائد على الاستثمار:' : 'Return on Investment:'} ${project.roi}
+            </div>
+        </div>
+    `;
+    
+    projectDetailsSection.style.display = 'block';
+    
+    setTimeout(() => {
+        projectDetailsSection.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+}
+
+// وظائف الاستثمار
+function selectInvestment(type) {
+    currentInvestment = type;
+    customIndicators = []; // Reset custom indicators
+    loadInvestmentForm(type);
+    showSection('input');
+}
+
+function loadInvestmentForm(type) {
+    const formContainer = document.getElementById('dynamicForm');
+    const formFields = investmentForms[type][currentLang];
+    const t = text[currentLang];
+    
+    formContainer.innerHTML = '';
+    
+    // إضافة نصائح حسب نوع الاستثمار
+    if (type === 'hospital') {
+        const tip = document.createElement('div');
+        tip.className = 'info-tip';
+        tip.innerHTML = `<i class="fas fa-info-circle"></i> ${t.noteHospital}`;
+        formContainer.appendChild(tip);
+    } else if (type === 'nonfinancial') {
+        const tip = document.createElement('div');
+        tip.className = 'info-tip';
+        tip.innerHTML = `<i class="fas fa-info-circle"></i> ${t.noteNonFinancial}`;
+        formContainer.appendChild(tip);
+        
+        // إضافة شرح للصيغ الحسابية
+        const formulaDiv = document.createElement('div');
+        formulaDiv.className = 'nonfinancial-formula';
+        
+        if (currentLang === 'ar') {
+            formulaDiv.innerHTML = `
+                <div class="formula-title">الصيغ الحسابية المستخدمة:</div>
+                <div class="formula-equation">1. ROI = (التكاليف العلاجية المتجنبة - تكلفة البرنامج) / تكلفة البرنامج</div>
+                <div class="formula-equation">2. صافي المنفعة = التكاليف العلاجية المتجنبة - تكلفة البرنامج</div>
+                <div class="formula-equation">3. نسبة B/C = التكاليف العلاجية المتجنبة / تكلفة البرنامج</div>
+                <div class="formula-equation">4. التكلفة الصافية الإضافية = تكلفة البرنامج - التكاليف العلاجية المتجنبة</div>
+                <div class="formula-equation">5. CEA = التكلفة الصافية الإضافية / عدد الحالات المتجنبة</div>
+                <div class="formula-equation">6. CUA (ICUR) = التكلفة الصافية الإضافية / QALY المكتسبة</div>
+            `;
+        } else {
+            formulaDiv.innerHTML = `
+                <div class="formula-title">Calculation Formulas Used:</div>
+                <div class="formula-equation">1. ROI = (Avoided Treatment Costs - Program Cost) / Program Cost</div>
+                <div class="formula-equation">2. Net Benefit = Avoided Treatment Costs - Program Cost</div>
+                <div class="formula-equation">3. B/C Ratio = Avoided Treatment Costs / Program Cost</div>
+                <div class="formula-equation">4. Net Additional Cost = Program Cost - Avoided Treatment Costs</div>
+                <div class="formula-equation">5. CEA = Net Additional Cost / Avoided Cases</div>
+                <div class="formula-equation">6. CUA (ICUR) = Net Additional Cost / QALY Gained</div>
+            `;
+        }
+        
+        formContainer.appendChild(formulaDiv);
+    }
+    
+    formFields.forEach(field => {
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        if (field.type === 'select') {
+            formGroup.innerHTML = `
+                <label class="form-label" for="${field.id}">${field.label}</label>
+                <select id="${field.id}" class="form-select">
+                    ${field.options.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('')}
+                </select>
+            `;
+        } else {
+            formGroup.innerHTML = `
+                <label class="form-label" for="${field.id}">${field.label}</label>
+                <input type="${field.type}" id="${field.id}" class="form-input" placeholder="${field.placeholder}" ${field.default ? `value="${field.default}"` : ''}>
+            `;
+        }
+        
+        formContainer.appendChild(formGroup);
+    });
+}
+
+function fillDummyData() {
+    const formFields = investmentForms[currentInvestment][currentLang];
+    
+    formFields.forEach(field => {
+        const input = document.getElementById(field.id);
+        if (input) {
+            if (field.type === 'number') {
+                if (field.id === 'program_cost') {
+                    input.value = Math.floor(Math.random() * 500000) + 50000;
+                } else if (field.id === 'avoided_treatment_costs') {
+                    input.value = Math.floor(Math.random() * 750000) + 100000;
+                } else if (field.id === 'avoided_cases') {
+                    input.value = Math.floor(Math.random() * 500) + 50;
+                } else if (field.id === 'qaly_gained') {
+                    input.value = (Math.random() * 25 + 2.5).toFixed(1);
+                } else if (field.id === 'program_duration') {
+                    input.value = Math.floor(Math.random() * 5) + 1;
+                } else if (field.id.includes('cost') || field.id.includes('revenue') || field.id.includes('price')) {
+                    input.value = Math.floor(Math.random() * 1000000) + 10000;
+                } else if (field.id.includes('rate') || field.id.includes('satisfaction')) {
+                    input.value = Math.floor(Math.random() * 30) + 70;
+                } else if (field.id.includes('visits') || field.id.includes('units') || field.id.includes('procedures')) {
+                    input.value = Math.floor(Math.random() * 10000) + 1000;
+                } else if (field.id.includes('lifespan')) {
+                    input.value = Math.floor(Math.random() * 10) + 5;
+                } else {
+                    input.value = Math.floor(Math.random() * 100) + 1;
+                }
+            } else if (field.type === 'text') {
+                if (currentLang === 'ar') {
+                    if (field.id === 'program_name') input.value = 'برنامج التوعية الصحية التجريبي';
+                    else if (field.id === 'hospital_name') input.value = 'مستشفى المدينة التجريبي';
+                    else if (field.id === 'drug_name') input.value = 'دواء تجريبي XYZ';
+                    else if (field.id === 'device_name') input.value = 'جهاز الأشعة المقطعية التجريبي';
+                    else input.value = `بيانات تجريبية ${field.label}`;
+                } else {
+                    if (field.id === 'program_name') input.value = 'Health Awareness Test Program';
+                    else if (field.id === 'hospital_name') input.value = 'City Hospital Test';
+                    else if (field.id === 'drug_name') input.value = 'Test Drug XYZ';
+                    else if (field.id === 'device_name') input.value = 'CT Scan Device Test';
+                    else input.value = `Sample data for ${field.label}`;
+                }
+            } else if (field.type === 'select') {
+                // لا نغير قيمة select في البيانات التجريبية
+            }
+        }
+    });
+    
+    alert(currentLang === 'ar' ? 'تم تعبئة البيانات التجريبية' : 'Sample data has been filled');
+}
+
+function calculateROI() {
+    if (!currentInvestment) return;
+    
+    const formFields = investmentForms[currentInvestment][currentLang];
+    const inputData = {};
+    
+    formFields.forEach(field => {
+        if (field.type === 'select') {
+            const select = document.getElementById(field.id);
+            inputData[field.id] = select ? select.value : '';
+        } else {
+            const input = document.getElementById(field.id);
+            inputData[field.id] = parseFloat(input.value) || 0;
+        }
+    });
+    
+    let results = {};
+    switch(currentInvestment) {
+        case 'hospital':
+            results = calculateHospitalROI(inputData);
+            break;
+        case 'pharma':
+            results = calculatePharmaROI(inputData);
+            break;
+        case 'devices':
+            results = calculateDevicesROI(inputData);
+            break;
+        case 'nonfinancial':
+            results = calculateNonFinancialROI(inputData);
+            break;
+    }
+    
+    // حفظ في السجل
+    const calculation = {
+        id: Date.now(),
+        type: currentInvestment,
+        data: inputData,
+        customIndicators: currentInvestment === 'nonfinancial' ? [...customIndicators] : [],
+        results: results,
+        timestamp: new Date().toISOString()
+    };
+    
+    investmentHistory.unshift(calculation);
+    
+    try {
+        localStorage.setItem('healthROIHistory', JSON.stringify(investmentHistory));
+    } catch (e) {
+        console.warn('Could not save to localStorage', e);
+    }
+    
+    displayResults(results);
+    showSection('dashboard');
+}
+
+function calculateHospitalROI(data) {
+    const isNonProfit = data.institution_type === 'nonprofit';
+    
+    // حساب الإيرادات السنوية (للمؤسسات الربحية فقط)
+    const annualRevenue = isNonProfit ? 0 : data.patient_visits * data.avg_revenue_per_visit;
+    
+    // تقسيم تكاليف المعدات والمرافق على العمر الافتراضي
+    const equipmentLifespan = data.equipment_lifespan || 10;
+    const facilityLifespan = data.facility_lifespan || 30;
+    
+    const annualEquipmentCost = data.equipment_costs / equipmentLifespan;
+    const annualFacilityCost = data.facility_costs / facilityLifespan;
+    
+    // حساب التكاليف السنوية
+    const annualCost = data.staff_costs + annualEquipmentCost + annualFacilityCost + 
+                      data.medication_costs + data.operational_costs + data.other_costs;
+    
+    const netProfit = annualRevenue - annualCost;
+    const roi = annualCost > 0 ? (netProfit / annualCost) * 100 : 0;
+    
+    return { 
+        totalRevenue: annualRevenue, 
+        totalCost: annualCost, 
+        netProfit, 
+        roi,
+        isNonProfit,
+        annualEquipmentCost,
+        annualFacilityCost,
+        equipmentLifespan,
+        facilityLifespan
+    };
+}
+
+function calculatePharmaROI(data) {
+    const totalRevenue = data.units_sold * data.price_per_unit;
+    const totalCost = data.rd_costs + data.production_costs + data.marketing_costs + 
+                     data.distribution_costs + data.regulatory_costs;
+    const netProfit = totalRevenue - totalCost;
+    const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+    
+    return { totalRevenue, totalCost, netProfit, roi };
+}
+
+function calculateDevicesROI(data) {
+    const annualRevenue = data.procedures_per_year * data.revenue_per_procedure;
+    
+    // حساب التكاليف لكل إجراء
+    const costPerProcedure = data.staff_cost_per_procedure + data.utility_cost_per_procedure;
+    const totalProcedureCosts = data.procedures_per_year * costPerProcedure;
+    
+    // تقسيم تكلفة الشراء على العمر الافتراضي
+    const deviceLifespan = data.device_lifespan || 8;
+    const annualDeviceCost = data.purchase_cost / deviceLifespan;
+    
+    // التكاليف السنوية
+    const annualCost = annualDeviceCost + data.maintenance_cost + data.training_cost + 
+                      totalProcedureCosts + data.other_device_costs;
+    
+    const netProfit = annualRevenue - annualCost;
+    const roi = annualCost > 0 ? (netProfit / annualCost) * 100 : 0;
+    
+    return { 
+        totalRevenue: annualRevenue, 
+        totalCost: annualCost, 
+        netProfit, 
+        roi,
+        deviceLifespan,
+        annualDeviceCost,
+        costPerProcedure
+    };
+}
+
+function calculateNonFinancialROI(data) {
+    const programCost = data.program_cost || 0;
+    const avoidedTreatmentCosts = data.avoided_treatment_costs || 0;
+    const avoidedCases = data.avoided_cases || 0;
+    const qalyGained = data.qaly_gained || 0;
+    const programDuration = data.program_duration || 1;
+    
+    // 1. ROI = (التكاليف العلاجية المتجنبة - تكلفة البرنامج) / تكلفة البرنامج
+    const roi = programCost > 0 ? ((avoidedTreatmentCosts - programCost) / programCost) * 100 : 0;
+    
+    // 2. صافي المنفعة (Net Benefit) = التكاليف العلاجية المتجنبة - تكلفة البرنامج
+    const netBenefit = avoidedTreatmentCosts - programCost;
+    
+    // 3. نسبة المنفعة للتكلفة (B/C) = التكاليف العلاجية المتجنبة / تكلفة البرنامج
+    const benefitCostRatio = programCost > 0 ? avoidedTreatmentCosts / programCost : 0;
+    
+    // 4. التكلفة الصافية الإضافية = تكلفة البرنامج - التكاليف العلاجية المتجنبة
+    const netAdditionalCost = programCost - avoidedTreatmentCosts;
+    
+    // 5. CEA (تكلفة لكل حالة متجنبة) = التكلفة الصافية الإضافية / عدد الحالات المتجنبة
+    const cea = avoidedCases > 0 ? netAdditionalCost / avoidedCases : 0;
+    
+    // 6. CUA (ICUR) = التكلفة الصافية الإضافية / QALY المكتسبة
+    const cuaIcur = qalyGained > 0 ? netAdditionalCost / qalyGained : 0;
+    
+    // التكاليف السنوية
+    const annualCost = programCost / programDuration;
+    
+    return { 
+        totalRevenue: avoidedTreatmentCosts,
+        totalCost: programCost,
+        annualCost: annualCost,
+        netProfit: netBenefit,
+        roi: roi,
+        isNonFinancial: true,
+        programDuration: programDuration,
+        
+        // النتائج الجديدة
+        programCost: programCost,
+        avoidedTreatmentCosts: avoidedTreatmentCosts,
+        avoidedCases: avoidedCases,
+        qalyGained: qalyGained,
+        netBenefit: netBenefit,
+        benefitCostRatio: benefitCostRatio,
+        netAdditionalCost: netAdditionalCost,
+        cea: cea,
+        cuaIcur: cuaIcur
+    };
+}
+
+function displayResults(results) {
+    // تحديث KPIs الأساسية
+    document.getElementById('kpiRevenue').textContent = formatNumber(results.avoidedTreatmentCosts || results.totalRevenue);
+    document.getElementById('kpiCost').textContent = formatNumber(results.totalCost);
+    document.getElementById('kpiProfit').textContent = formatNumber(results.netProfit);
+    document.getElementById('kpiROI').textContent = results.roi.toFixed(2) + '%';
+    
+    // عرض نتائج العوائد غير المالية إذا كانت متوفرة
+    const nfResultsDiv = document.getElementById('nonFinancialResults');
+    const nfResultsGrid = document.getElementById('nfResultsGrid');
+    
+    if (results.isNonFinancial) {
+        nfResultsDiv.style.display = 'block';
+        nfResultsGrid.innerHTML = '';
+        
+        // النتائج الجديدة
+        const metrics = [
+            {
+                title: currentLang === 'ar' ? 'ROI (العائد على الاستثمار)' : 'ROI (Return on Investment)',
+                value: results.roi.toFixed(2) + '%',
+                formula: currentLang === 'ar' 
+                    ? 'ROI = (التكاليف العلاجية المتجنبة - تكلفة البرنامج) / تكلفة البرنامج' 
+                    : 'ROI = (Avoided Treatment Costs - Program Cost) / Program Cost',
+                description: currentLang === 'ar' 
+                    ? 'نسبة العائد على الاستثمار' 
+                    : 'Return on Investment Ratio'
+            },
+            {
+                title: currentLang === 'ar' ? 'صافي المنفعة' : 'Net Benefit',
+                value: formatNumber(results.netBenefit),
+                formula: currentLang === 'ar' 
+                    ? 'صافي المنفعة = التكاليف العلاجية المتجنبة - تكلفة البرنامج' 
+                    : 'Net Benefit = Avoided Treatment Costs - Program Cost',
+                description: currentLang === 'ar' 
+                    ? 'القيمة المالية الصافية للبرنامج' 
+                    : 'Net financial value of the program'
+            },
+            {
+                title: currentLang === 'ar' ? 'نسبة المنفعة للتكلفة (B/C)' : 'Benefit-Cost Ratio (B/C)',
+                value: results.benefitCostRatio.toFixed(2),
+                formula: currentLang === 'ar' 
+                    ? 'نسبة B/C = التكاليف العلاجية المتجنبة / تكلفة البرنامج' 
+                    : 'B/C Ratio = Avoided Treatment Costs / Program Cost',
+                description: currentLang === 'ar' 
+                    ? 'كل وحدة نقدية تنفق تعود بـ ' + results.benefitCostRatio.toFixed(2) + ' وحدة' 
+                    : 'Each monetary unit spent returns ' + results.benefitCostRatio.toFixed(2) + ' units'
+            },
+            {
+                title: currentLang === 'ar' ? 'التكلفة الصافية الإضافية' : 'Net Additional Cost',
+                value: formatNumber(results.netAdditionalCost),
+                formula: currentLang === 'ar' 
+                    ? 'التكلفة الصافية = تكلفة البرنامج - التكاليف العلاجية المتجنبة' 
+                    : 'Net Additional Cost = Program Cost - Avoided Treatment Costs',
+                description: currentLang === 'ar' 
+                    ? 'التكلفة الإضافية بعد خصم الفوائد' 
+                    : 'Additional cost after deducting benefits'
+            },
+            {
+                title: currentLang === 'ar' ? 'CEA (تكلفة لكل حالة متجنبة)' : 'CEA (Cost per Avoided Case)',
+                value: formatNumber(results.cea),
+                formula: currentLang === 'ar' 
+                    ? 'CEA = التكلفة الصافية الإضافية / عدد الحالات المتجنبة' 
+                    : 'CEA = Net Additional Cost / Avoided Cases',
+                description: currentLang === 'ar' 
+                    ? 'التكلفة الإضافية لكل حالة تم تجنبها' 
+                    : 'Additional cost per case avoided'
+            },
+            {
+                title: currentLang === 'ar' ? 'CUA (ICUR)' : 'CUA (ICUR)',
+                value: formatNumber(results.cuaIcur),
+                formula: currentLang === 'ar' 
+                    ? 'CUA = التكلفة الصافية الإضافية / QALY المكتسبة' 
+                    : 'CUA = Net Additional Cost / QALY Gained',
+                description: currentLang === 'ar' 
+                    ? 'التكلفة الإضافية لكل سنة حياة معدلة بالجودة' 
+                    : 'Additional cost per Quality-Adjusted Life Year'
+            }
+        ];
+        
+        metrics.forEach(metric => {
+            const resultCard = document.createElement('div');
+            resultCard.className = 'nf-result-card';
+            resultCard.innerHTML = `
+                <div class="nf-result-label" style="font-weight: bold; color: var(--primary);">
+                    ${metric.title}
+                </div>
+                <div class="nf-result-value" style="font-size: 24px; margin: 10px 0;">
+                    ${metric.value}
+                </div>
+                <div class="nf-result-unit" style="font-size: 12px; color: var(--secondary); margin-bottom: 8px;">
+                    ${metric.description}
+                </div>
+                <div class="nf-result-unit" style="font-size: 11px; color: var(--text-light); font-style: italic; border-top: 1px dashed var(--border); padding-top: 8px;">
+                    ${metric.formula}
+                </div>
+            `;
+            nfResultsGrid.appendChild(resultCard);
+        });
+    } else {
+        nfResultsDiv.style.display = 'none';
+    }
+}
+
+function formatNumber(num) {
+    // Use Latin numerals (0-9) for both Arabic and English
+    return new Intl.NumberFormat(currentLang === 'ar' ? 'ar-SA' : 'en-US', {
+        numberingSystem: 'latn'
+    }).format(Math.round(num));
+}
+
+// وظائف المشاريع المحفوظة
+function saveCurrentProject() {
+    const latestCalc = investmentHistory[0];
+    if (!latestCalc) {
+        alert(currentLang === 'ar' ? 'لا يوجد حساب حالياً لحفظه' : 'No current calculation to save');
+        return;
+    }
+    
+    const t = text[currentLang];
+    
+    // إنشاء مشروع محفوظ جديد
+    const savedProject = {
+        id: Date.now(),
+        name: currentLang === 'ar' ? `مشروع ${getInvestmentTypeName(latestCalc.type)}` : `${getInvestmentTypeName(latestCalc.type)} Project`,
+        type: latestCalc.type,
+        typeName: getInvestmentTypeName(latestCalc.type),
+        data: latestCalc.data,
+        results: latestCalc.results,
+        timestamp: new Date().toISOString(),
+        date: new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US'),
+        roi: latestCalc.results.roi.toFixed(2) + '%',
+        netProfit: formatNumber(latestCalc.results.netProfit)
+    };
+    
+    // إضافة المشروع إلى القائمة
+    savedProjects.unshift(savedProject);
+    
+    // حفظ في localStorage
+    try {
+        localStorage.setItem('healthROISavedProjects', JSON.stringify(savedProjects));
+    } catch (e) {
+        console.warn('Could not save to localStorage', e);
+    }
+    
+    alert(t.projectSavedMsg);
+}
+
+function getInvestmentTypeName(type) {
+    const names = {
+        ar: {
+            hospital: 'مستشفى',
+            pharma: 'أدوية',
+            devices: 'أجهزة طبية',
+            nonfinancial: 'عوائد غير مالية'
+        },
+        en: {
+            hospital: 'Hospital',
+            pharma: 'Pharmaceuticals',
+            devices: 'Medical Devices',
+            nonfinancial: 'Non-Financial'
+        }
+    };
+    
+    return names[currentLang][type] || type;
+}
+
+function loadSavedProjects() {
+    const savedProjectsGrid = document.getElementById('savedProjectsGrid');
+    if (!savedProjectsGrid) return;
+    
+    const t = text[currentLang];
+    
+    if (savedProjects.length === 0) {
+        savedProjectsGrid.innerHTML = `
+            <div class="empty-state" style="text-align: center; padding: 40px; color: var(--text-light);">
+                <i class="fas fa-save" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                <h3 style="margin-bottom: 8px;">${currentLang === 'ar' ? 'لا توجد مشاريع محفوظة' : 'No saved projects'}</h3>
+                <p>${currentLang === 'ar' ? 'احفظ مشروعك الحالي من صفحة النتائج' : 'Save your current project from the results page'}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    savedProjectsGrid.innerHTML = '';
+    
+    savedProjects.forEach(project => {
+        const projectCard = document.createElement('div');
+        projectCard.className = 'saved-project-card';
+        
+        const formattedDate = new Date(project.timestamp).toLocaleDateString(
+            currentLang === 'ar' ? 'ar-SA' : 'en-US', 
+            { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }
+        );
+        
+        const projectName = project.data.hospital_name || 
+                           project.data.drug_name || 
+                           project.data.device_name || 
+                           project.data.program_name || 
+                           project.name;
+        
+        projectCard.innerHTML = `
+            <div class="project-type-badge">
+                ${project.typeName}
+            </div>
+            <h3>${projectName}</h3>
+            <p>${currentLang === 'ar' ? 'العائد على الاستثمار: ' : 'ROI: '} <strong>${project.roi}</strong></p>
+            <p>${currentLang === 'ar' ? 'صافي الربح: ' : 'Net Profit: '} <strong>${project.netProfit}</strong></p>
+            
+            <div class="saved-project-meta">
+                <div class="saved-project-date">
+                    <i class="far fa-calendar"></i> ${formattedDate}
+                </div>
+                <div class="saved-project-actions">
+                    <button class="btn btn-primary btn-sm" onclick="restoreSavedProject(${project.id})">
+                        <i class="fas fa-redo"></i> ${currentLang === 'ar' ? 'استرجاع' : 'Restore'}
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteSavedProject(${project.id})">
+                        <i class="fas fa-trash"></i> ${currentLang === 'ar' ? 'حذف' : 'Delete'}
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        savedProjectsGrid.appendChild(projectCard);
+    });
+}
+
+function deleteSavedProject(projectId) {
+    const t = text[currentLang];
+    
+    if (confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المشروع؟' : 'Are you sure you want to delete this project?')) {
+        savedProjects = savedProjects.filter(project => project.id !== projectId);
+        
+        // تحديث localStorage
+        try {
+            localStorage.setItem('healthROISavedProjects', JSON.stringify(savedProjects));
+        } catch (e) {
+            console.warn('Could not save to localStorage', e);
+        }
+        
+        // إعادة تحميل المشاريع المحفوظة
+        loadSavedProjects();
+        
+        alert(t.projectDeletedMsg);
+    }
+}
+
+function restoreSavedProject(projectId) {
+    const t = text[currentLang];
+    const project = savedProjects.find(p => p.id === projectId);
+    
+    if (!project) return;
+    
+    // تعيين الاستثمار الحالي
+    currentInvestment = project.type;
+    
+    // تحميل النموذج
+    loadInvestmentForm(project.type);
+    
+    // ملء البيانات
+    const formFields = investmentForms[project.type][currentLang];
+    formFields.forEach(field => {
+        const input = document.getElementById(field.id);
+        if (input) {
+            if (field.type === 'select') {
+                input.value = project.data[field.id] || '';
+            } else {
+                input.value = project.data[field.id] || '';
+            }
+        }
+    });
+    
+    // عرض النتائج
+    displayResults(project.results);
+    
+    // الانتقال إلى صفحة النتائج
+    showSection('dashboard');
+    
+    alert(t.projectRestoredMsg);
+}
+
+// التهيئة الأولية
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            doLogin();
+        });
+    }
+    
+    // تمكين تسجيل الدخول بالضغط على Enter
+    document.getElementById('loginUser').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('loginPass').focus();
+        }
+    });
+    
+    document.getElementById('loginPass').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            doLogin();
+        }
+    });
+});
+</script>
+</body>
+</html>
